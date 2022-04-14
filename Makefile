@@ -6,7 +6,7 @@
 #    By: severi <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/30 18:43:06 by severi            #+#    #+#              #
-#    Updated: 2022/04/14 14:30:36 by severi           ###   ########.fr        #
+#    Updated: 2022/04/14 15:17:03 by severi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -102,12 +102,13 @@ all: $(NAME)
 #	ar rc $(NAME) $(OBJS) $(LIB_OBJS)
 #	ranlib $(NAME)
 
-$(NAME): $(LIB) $(OBJS)
+$(NAME):  $(LIB) $(OBJS)
+	make -C $(LIBFT_DIR) fclean && make -C $(LIBFT_DIR)
 	$(CC) $(CFLAGS) -I $(INC) -I $(LIBFT_INC) -c $(SRCS) -o $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L $(LIBFT_DIR) -lft
 	
 $(LIB): 
-	make -C $(LIBDIR) fclean && make -C $(LIBDIR)
+	make -C $(LIBFT_DIR) fclean && make -C $(LIBFT_DIR)
 
 $(OBJS): srcs/%.o : srcs/%.c
 	$(CC) $(CFLAGS) -I $(LIBFT_INC) -I $(INC) -c $< -o $@ 
