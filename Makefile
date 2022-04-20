@@ -6,7 +6,7 @@
 #    By: severi <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 00:48:33 by severi            #+#    #+#              #
-#    Updated: 2022/04/20 00:54:42 by severi           ###   ########.fr        #
+#    Updated: 2022/04/20 01:36:15 by severi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ LINK = -L libft -lft
 
 LIBFT = libft/libft.a
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -Wconversion -g
 
 all: $(NAME)
 
