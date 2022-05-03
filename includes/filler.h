@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:39:24 by severi            #+#    #+#             */
-/*   Updated: 2022/05/03 05:30:14 by severi           ###   ########.fr       */
+/*   Updated: 2022/05/03 07:04:10 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 typedef struct	s_player
 {
 	int			player_num;
-	char		p_char;
+	char		player_char;
+	char		last_pos;
 	int			x;
 	int			y;
 }				t_player;

@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:38:19 by severi            #+#    #+#             */
-/*   Updated: 2022/05/03 06:33:51 by severi           ###   ########.fr       */
+/*   Updated: 2022/05/03 07:53:26 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,40 +45,7 @@ t_base	*create_empty(int height, int length)
 	return (base);
 }
 
-/*
- * Create a piece with height x length with "."'s
- */
-/*
-int **create_piece(int height, int length)
-{
-	int **piece;
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	piece = (int **)malloc(sizeof(int*) * (long unsigned int)height);
-	while (i < height)
-	{
-		piece[i] = (int *)malloc(sizeof(int) * (long unsigned int)length);
-		i++;
-	}
-	i = 0;
-	while (i < height)
-	{
-		while (j < length)
-		{
-			piece[i][j] = 46;
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-	return (piece);
-}
-*/
-
-void	update_map(int ***map, char *row)
+void	update_map(t_base **map, char *row)
 {
 	int	j;
 	int i;
@@ -92,7 +59,7 @@ void	update_map(int ***map, char *row)
 	j = ft_atoi(ft_strsub(row, 0, (size_t)i++));
 	while ((size_t)i < ft_strlen(row))
 	{
-		*map[j][k++] = (int)row[i++];
+		(*map)->contents[j][k++] = (int)row[i++];
 	}
 }
 
@@ -113,18 +80,18 @@ int	update_piece(t_base **piece, char *row)
 	return (1);
 }
 
-void print_map(int **map, int fd)
+void print_map(t_base *map, int fd)
 {
 	int i;
 	int j;
 
 	i = 0;
 	j = 0;
-	while (i < 15) // height
+	while (i < map->height) // height
 	{
-		while (j < 17) // length
+		while (j < map->length) // length
 		{
-			ft_putchar_fd((char)(map[i][j]), fd);
+			ft_putchar_fd((char)(map->contents[i][j]), fd);
 			//printf("%c", map[i][j]);
 			j++;
 		}
@@ -155,19 +122,6 @@ int	get_dim(char *str, int d)
 	return (ft_atoi(ft_strsub(str, (unsigned int)i, (unsigned int)j)));
 }
 
-
-/*
-int	get_height(char *str)
-{
-	int i;
-
-	i = 8;
-	while (ft_isdigit(str[i]) == 1)
-		i++;
-	return (ft_atoi(ft_strsub(str, 8, (size_t)i - 8)));
-}
-*/
-
 void	free_base(t_base **base)
 {
 	int	i;
@@ -181,10 +135,45 @@ void	free_base(t_base **base)
 	free((*base));
 }
 
-void	place_piece(t_base *piece, t_base *map)
+void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 {
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (map->height > i)
+	{
+		while (map->length > j)
+//		while (map->contents[i][j] != player->player_char && 
+//				map->contents[i][j] != player->last_pos) 
+		{
+			if (map->contents[i][j] == player->player_char || 
+				map->contents[i][j] == player->last_pos)
+			{
+				player->x = i;
+				player->y = j;
+			}
+			j++;
+		}
+		i++;
+	}
+	printf("%d %d\n", player->x, player->y);
+	ft_putnbr_fd(player->x ,1);
+	ft_putchar_fd(' ', 1);
+	ft_putnbr_fd(player->y ,1);
+	ft_putchar_fd('\n', 1);
+	
+	ft_putnbr_fd(player->x ,fd);
+	ft_putchar_fd(' ', fd);
+	ft_putnbr_fd(player->y ,fd);
+	ft_putchar_fd('\n', fd);
+
+
+
 	if (piece->height != map->height)
 		ft_putstr_fd("8 3\n", 1);
+	
 }
 
 int	main(void)
@@ -202,12 +191,18 @@ int	main(void)
 	row_num = 0;
 	player = (t_player*)malloc(sizeof(t_player));
 	player->player_num = 1;
+	player->player_char = 'O';
+	player->last_pos = 'o';
 	fd = open("logs.txt", O_WRONLY);
+	
+	ft_putstr_fd("STARTING NEW LOGGING\n\n", fd);
 	//map = create_map1(25, 15);
 	//print_map(map);
+
+
 	
-	while(1)
-	{
+//	while(1)
+//	{
 		//fd = open("logs.txt", O_WRONLY);
 		//perror("Error printed by perror: ");
 		//ft_putstr_fd("8 2\n", 0);
@@ -223,6 +218,8 @@ int	main(void)
 		if (found == NULL)
 		{
 			player->player_num = 2;
+			player->player_char = 'X';
+			player->last_pos = 'x';
 		}
 		found = NULL;
 		//ft_putchar_fd('\n',fd);
@@ -235,42 +232,63 @@ int	main(void)
 		if (found != NULL)
 		{
 			map = create_empty(get_dim(buf, 1), get_dim(buf, 2));
-			print_map(map->contents, fd);
+			print_map(map, fd);
 		}
 		found = NULL;
+	
+	while(1)
+	{
 		while((read = get_next_line(0, &buf)) != 0)
 		{
 			ft_putstr_fd(buf, fd);
 			ft_putchar_fd('\n',fd);
 			found = ft_strstr(buf, "Piece");
 			if (ft_isdigit(buf[0]) == 1)
-				update_map(&map->contents, buf);
+				update_map(&map, buf);
 			else if (found != NULL)
 			{
 				piece = create_empty(get_dim(buf, 1), get_dim(buf, 2));
+				ft_putstr_fd("piece read\n", fd);
+				print_map(piece, fd);
+				ft_putstr_fd("piece printed\n", fd);
+
 				found = NULL;
 			}
 			else if (buf[0] == '.' || buf[0] == '*')
 			{
-				row_num =+ update_piece(&piece, buf);
+				ft_putstr_fd("going into update\n", fd);
+				row_num = row_num + update_piece(&piece, buf);
+				ft_putstr_fd("coming out of update\n", fd);
+				ft_putnbr_fd(piece->height, fd);
+				ft_putstr_fd(" == ", fd);
+				ft_putnbr_fd(row_num, fd);
+				ft_putstr_fd(" are they equal?\n", fd);
+
+
 				if (piece->height == row_num)	
 				{
-					place_piece(piece, map);
+					printf("piece complete \n");
+					ft_putstr_fd("piece complete\n", fd);
+					print_map(piece, fd);
+					place_piece(piece, map, player, fd);
+					ft_putstr_fd("coming out of place_piece\n", fd);
+
 					row_num = 0;
 					free_base(&piece);
 				}
 			}
 			ft_strdel(&buf);
 		}
-		print_map(map->contents, fd);	
+		//ft_putstr_fd("printing map\n", fd);
+		//print_map(map, fd);
 
 		//fd = open("logs.txt", O_WRONLY);
 		
 		//ft_putstr_fd(buf, fd);
 		//ft_putchar_fd('\n',fd);
-		ft_putchar('\n');
-		ft_putstr(buf);
-		ft_putchar('\n');
+		//ft_putchar('\n');
+		//ft_putstr(buf);
+		//ft_putchar('\n');
 	}
 
 	return (0);
