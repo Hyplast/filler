@@ -1,5 +1,6 @@
-seed = 3546
-O: timedout
+seed = 4074
+O: error on input
+../../ssavukos.filler: Segfault at 0
 players/ksuomala.filler won
 Score:
-0AGAINST153
+0AGAINST145

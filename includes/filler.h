@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:39:24 by severi            #+#    #+#             */
-/*   Updated: 2022/04/29 20:17:36 by severi           ###   ########.fr       */
+/*   Updated: 2022/05/03 05:30:14 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,12 @@ typedef struct	s_player
 	int			x;
 	int			y;
 }				t_player;
+
+typedef struct	s_base
+{
+	int			**contents;
+	int			height;
+	int			length;
+}				t_base;
 
 #endif
