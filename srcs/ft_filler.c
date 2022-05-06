@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:38:19 by severi            #+#    #+#             */
-/*   Updated: 2022/05/03 07:53:26 by severi           ###   ########.fr       */
+/*   Updated: 2022/05/06 10:06:55 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,22 @@ void	free_base(t_base **base)
 	free((*base));
 }
 
+int	chk_piece_fit(t_base *piece, t_base *map)
+{
+	int	x;
+	int	y;
+	int	i;
+	int	j;
+	
+	x = 0;
+	y = 0;
+	i = 0;
+	j = 0;
+	if (piece->contents[x][y] == map->contents[i][j])
+		return (1);
+	return (0);
+}
+
 void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 {
 	int	i;
@@ -156,6 +172,7 @@ void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 			}
 			j++;
 		}
+		j = 0;
 		i++;
 	}
 	printf("%d %d\n", player->x, player->y);
@@ -169,10 +186,10 @@ void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 	ft_putnbr_fd(player->y ,fd);
 	ft_putchar_fd('\n', fd);
 
-
-
-	if (piece->height != map->height)
-		ft_putstr_fd("8 3\n", 1);
+	chk_piece_fit(piece, map);
+//	piece.contents[][]
+//	if (piece->height != map->height)
+//		ft_putstr_fd("8 3\n", 1);
 	
 }
 
