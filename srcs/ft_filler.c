@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:38:19 by severi            #+#    #+#             */
-/*   Updated: 2022/05/07 04:56:43 by severi           ###   ########.fr       */
+/*   Updated: 2022/05/07 05:46:05 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,11 +239,11 @@ int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 	
 	i = 0;
 	j = 0;
-	while (i < piece->length)
+	while (i < piece->height)
 	{
-		while (j < piece->height)
+		while (j < piece->length)
 		{
-/*			ft_putstr_fd("inside outside_of_map: ", fd);
+			ft_putstr_fd("inside outside_of_map: ", fd);
 			ft_putnbr_fd(player->x , fd);
 			ft_putchar_fd(',', fd);	
 			ft_putnbr_fd(player->y , fd);
@@ -256,10 +256,18 @@ int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 			ft_putnbr_fd(piece->length , fd);
 			ft_putchar_fd(',', fd);	
 			ft_putnbr_fd(piece->height , fd);
-*/
+			ft_putstr_fd(" kolme ", fd);	
+			ft_putnbr_fd(piece->height + i, fd);
+			ft_putchar_fd('>', fd); 
+			ft_putnbr_fd(map->height - player->x, fd);
+			ft_putchar_fd('|', fd);	
+			ft_putnbr_fd(piece->length + j, fd);
+			ft_putchar_fd('>', fd); 
+			ft_putnbr_fd(map->length - player->y, fd);
 			ft_putchar_fd('\n', fd);
+
 			if (piece->height + i > map->height - player->x 
-				|| piece->length + j > map->height - player->y)
+				|| piece->length + j > map->length - player->y)
 				return (1);
 			j++;
 		}
@@ -280,7 +288,7 @@ int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 //1	.**
 //
 
-int		overlays(t_base *piece, t_base *map, t_player *player)
+int		overlays(t_base *piece, t_base *map, t_player *player, int fd)
 {
 	int	count;
 	int	i;
@@ -289,13 +297,22 @@ int		overlays(t_base *piece, t_base *map, t_player *player)
 	i = 0;
 	j = 0;
 	count = 0;
-	while (i < piece->length)
+	while (i < piece->height)
 	{
-		while (j < piece->height)
+		while (j < piece->length)
 		{
+//			ft_putstr_fd("piece content : ", fd);
+	
+//			ft_putchar_fd((char)(piece->contents[i][j]), fd);
+			ft_putstr_fd(" map content : ", fd);
+	
+			ft_putchar_fd((char)(map->contents[player->x + i][player->y + j]), fd);
+//			ft_putchar_fd('\n', fd);	
+
+
 			if (piece->contents[i][j] == '*')
 			{
-				if (map->contents[player->x + i][player->y + j] == '.')
+				if (map->contents[player->x + i][player->y + j] != '.')
 					count++;
 			}
 			j++;
@@ -303,6 +320,10 @@ int		overlays(t_base *piece, t_base *map, t_player *player)
 		j = 0;
 		i++;
 	}
+//	ft_putstr_fd("number of overlays: ", fd);
+//	ft_putnbr_fd(count,fd);
+//	ft_putstr_fd(" \n", fd);
+
 	return (count);
 }
 /*
@@ -342,23 +363,24 @@ int		fit_piece(t_base *piece, t_base *map, t_player **player, int fd)
 //			ft_putstr_fd(" or :", fd);
 //			ft_putnbr_fd((*player)->last_pos , fd);
 //			ft_putchar_fd('\n', fd);
-
+/*
 			if (!outside_of_map(piece, map, (*player), fd))
 				ft_putstr_fd(" outside_of_map is true : \n", fd);
-
+*/
 //			ft_putnbr_fd(piece->length , fd);
 //			ft_putchar_fd(',', fd);	
 //			ft_putnbr_fd(piece->height , fd);
 
 //			ft_putchar_fd('\n', fd);
 
-			if ((map->contents[i][j] == (*player)->player_char || 
-				map->contents[i][j] == (*player)->last_pos) 
-			 && !outside_of_map(piece, map, (*player), fd))
+//			if ((map->contents[i][j] == (*player)->player_char || 
+//				map->contents[i][j] == (*player)->last_pos) 
+//			 && !outside_of_map(piece, map, (*player), fd))
+			if (!outside_of_map(piece, map, (*player), fd))
 			{
 				ft_putstr_fd("going into overlays\n", fd);
 
-				if (overlays(piece, map, (*player)) == 1)
+				if (overlays(piece, map, (*player), fd) == 1)
 					return (1);
 			}
 			j++;
@@ -487,31 +509,31 @@ int	main(void)
 			else if (found != NULL)
 			{
 				piece = create_empty(get_dim(buf, 1), get_dim(buf, 2));
-				ft_putstr_fd("piece read\n", fd);
-				print_map(piece, fd);
-				ft_putstr_fd("piece printed\n", fd);
+			//	ft_putstr_fd("piece read\n", fd);
+			//	print_map(piece, fd);
+			//	ft_putstr_fd("piece printed\n", fd);
 
 				found = NULL;
 			}
 			else if (buf[0] == '.' || buf[0] == '*')
 			{
-				ft_putstr_fd("going into update\n", fd);
+			//	ft_putstr_fd("going into update\n", fd);
 				row_num = row_num + update_piece(&piece, buf);
-				ft_putstr_fd("coming out of update\n", fd);
-				ft_putnbr_fd(piece->height, fd);
-				ft_putstr_fd(" == ", fd);
-				ft_putnbr_fd(row_num, fd);
-				ft_putstr_fd(" are they equal?\n", fd);
+			//	ft_putstr_fd("coming out of update\n", fd);
+			//	ft_putnbr_fd(piece->height, fd);
+			//	ft_putstr_fd(" == ", fd);
+			//	ft_putnbr_fd(row_num, fd);
+			//	ft_putstr_fd(" are they equal?\n", fd);
 
 
 				if (piece->height == row_num)	
 				{
-					printf("piece complete \n");
-					ft_putstr_fd("piece complete\n", fd);
-					print_map(piece, fd);
-					ft_putstr_fd("going into place_piece\n", fd);
+			//		printf("piece complete \n");
+			//		ft_putstr_fd("piece complete\n", fd);
+			//		print_map(piece, fd);
+			//		ft_putstr_fd("going into place_piece\n", fd);
 					place_piece(piece, map, &player, fd);
-					ft_putstr_fd("coming out of place_piece\n", fd);
+			//		ft_putstr_fd("coming out of place_piece\n", fd);
 
 					row_num = 0;
 					free_base(&piece);
