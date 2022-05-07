@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:38:19 by severi            #+#    #+#             */
-/*   Updated: 2022/05/06 10:06:55 by severi           ###   ########.fr       */
+/*   Updated: 2022/05/07 04:56:43 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	free_base(t_base **base)
 	free((*base)->contents);
 	free((*base));
 }
-
+/*
 int	chk_piece_fit(t_base *piece, t_base *map)
 {
 	int	x;
@@ -150,15 +150,233 @@ int	chk_piece_fit(t_base *piece, t_base *map)
 		return (1);
 	return (0);
 }
+*/
+/*
+int		dist_between(int x1, int y1, int x2, int y2)
+{
+	int	x;
+	int y;
 
-void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
+	x = x2 - x1;
+	y = y2 - y1;
+	
+	return (y + x);
+}
+
+
+void	find_clo(t_base *map, t_player *player)
+{
+	char	enemy;
+	int		dist;
+	int		xy[2];
+
+	dist = 9999;
+	xy[0] = 0;
+	xy[1] = 0;
+	while (i < map.length)
+	{
+		while (j < map.height)
+		{
+			if (map->contents[i][j] == player_char)
+			{
+				if ( dist < dist_between(i, j, player->x, player->y))
+				{
+					dist = dist_between(i, j, player->x, player->y);
+					xy[0] = i;
+					xy[1] = j;
+				}
+			}
+			j++;
+		}
+		j = 0;
+		i++
+	}
+
+void	fnd_clo_ene(t_base *map, t_player *player)
+{
+	char	enemy;
+	int		dist;
+
+
+	dist = 99999;
+	enemy = 'O';
+	if (player->player_num == 2)
+		enemy = 'X';
+	while()
+
+	while (i < map.length)
+	{
+		while (j < map.height)
+		{
+			if (map[i][j] == enemy)
+			{
+				player->x = i;
+				player->y = j;
+				find_clo(map, player);
+
+			}
+			j++;
+		}
+		j = 0;
+		i++
+	}
+}
+
+*/
+void	insert_piece(int x, int y)
+{
+	//printf("%d %d\n", player->x, player->y);
+	ft_putnbr_fd(x ,1);
+	ft_putchar_fd(' ', 1);
+	ft_putnbr_fd(y ,1);
+	ft_putchar_fd('\n', 1);
+}
+
+int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
+{
+	int	i;
+	int	j;
+	
+	i = 0;
+	j = 0;
+	while (i < piece->length)
+	{
+		while (j < piece->height)
+		{
+/*			ft_putstr_fd("inside outside_of_map: ", fd);
+			ft_putnbr_fd(player->x , fd);
+			ft_putchar_fd(',', fd);	
+			ft_putnbr_fd(player->y , fd);
+			ft_putstr_fd(" i,j :", fd);
+			ft_putnbr_fd(i , fd);
+			ft_putchar_fd(',', fd);	
+			ft_putnbr_fd(j , fd);
+			ft_putstr_fd(" length, height :", fd);
+
+			ft_putnbr_fd(piece->length , fd);
+			ft_putchar_fd(',', fd);	
+			ft_putnbr_fd(piece->height , fd);
+*/
+			ft_putchar_fd('\n', fd);
+			if (piece->height + i > map->height - player->x 
+				|| piece->length + j > map->height - player->y)
+				return (1);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	return (0);
+}
+
+/// 012345
+//0	......
+//1	......
+//2	..x...
+//3	......
+//
+//	012
+//0	**.
+//1	.**
+//
+
+int		overlays(t_base *piece, t_base *map, t_player *player)
+{
+	int	count;
+	int	i;
+	int	j;
+	
+	i = 0;
+	j = 0;
+	count = 0;
+	while (i < piece->length)
+	{
+		while (j < piece->height)
+		{
+			if (piece->contents[i][j] == '*')
+			{
+				if (map->contents[player->x + i][player->y + j] == '.')
+					count++;
+			}
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	return (count);
+}
+/*
+void	try_piece(t_base *piece, t_base *map, t_player *player)
+{
+	if (outside_of_map(piece, map, player)!)
+				{
+					count = overlays(piece, map, player);
+					if (count == 1)
+						return (1);
+				}
+
+}
+*/
+int		fit_piece(t_base *piece, t_base *map, t_player **player, int fd)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	while (map->height > i)
+	while (i < map->height)
+	{
+		while (j < map->length)
+		{
+			(*player)->x = i;
+			(*player)->y = j;
+//			ft_putstr_fd("into outside_of_map: ", fd);
+//			ft_putnbr_fd((*player)->x , fd);
+//			ft_putchar_fd(',', fd);	
+//			ft_putnbr_fd((*player)->x , fd);
+//			ft_putchar_fd('\n', fd);	
+			
+//			ft_putnbr_fd(map->contents[i][j] , fd);
+//			ft_putchar_fd('=', fd);	
+//			ft_putnbr_fd((*player)->player_char , fd);
+//			ft_putstr_fd(" or :", fd);
+//			ft_putnbr_fd((*player)->last_pos , fd);
+//			ft_putchar_fd('\n', fd);
+
+			if (!outside_of_map(piece, map, (*player), fd))
+				ft_putstr_fd(" outside_of_map is true : \n", fd);
+
+//			ft_putnbr_fd(piece->length , fd);
+//			ft_putchar_fd(',', fd);	
+//			ft_putnbr_fd(piece->height , fd);
+
+//			ft_putchar_fd('\n', fd);
+
+			if ((map->contents[i][j] == (*player)->player_char || 
+				map->contents[i][j] == (*player)->last_pos) 
+			 && !outside_of_map(piece, map, (*player), fd))
+			{
+				ft_putstr_fd("going into overlays\n", fd);
+
+				if (overlays(piece, map, (*player)) == 1)
+					return (1);
+			}
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	return (0);
+}
+
+void	place_piece(t_base *piece, t_base *map, t_player **player, int fd)
+{
+//	int	i;
+//	int	j;
+
+//	i = 0;
+//	j = 0;
+/*	while (map->height > i)
 	{
 		while (map->length > j)
 //		while (map->contents[i][j] != player->player_char && 
@@ -175,18 +393,21 @@ void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 		j = 0;
 		i++;
 	}
-	printf("%d %d\n", player->x, player->y);
-	ft_putnbr_fd(player->x ,1);
-	ft_putchar_fd(' ', 1);
-	ft_putnbr_fd(player->y ,1);
-	ft_putchar_fd('\n', 1);
+*/
+	ft_putstr_fd("going into fit_piece\n", fd);
+
+	fit_piece(piece, map, player, fd);
+	insert_piece((*player)->x, (*player)->y);
 	
-	ft_putnbr_fd(player->x ,fd);
+	ft_putstr_fd("inserted: ", fd);
+	ft_putnbr_fd((*player)->x ,fd);
 	ft_putchar_fd(' ', fd);
-	ft_putnbr_fd(player->y ,fd);
+	ft_putnbr_fd((*player)->y ,fd);
 	ft_putchar_fd('\n', fd);
 
-	chk_piece_fit(piece, map);
+
+//	chk_piece_fit(piece, map);
+
 //	piece.contents[][]
 //	if (piece->height != map->height)
 //		ft_putstr_fd("8 3\n", 1);
@@ -239,10 +460,10 @@ int	main(void)
 			player->last_pos = 'x';
 		}
 		found = NULL;
-		//ft_putchar_fd('\n',fd);
+		ft_putchar_fd('P',fd);
 
 		ft_putstr_fd(ft_itoa(player->player_num), fd);
-		//ft_putchar_fd('\n',fd);
+		ft_putchar_fd('\n',fd);
 		free(buf);
 		read = get_next_line(0, &buf);
 		found = ft_strstr(buf, "Plateau");
@@ -257,6 +478,7 @@ int	main(void)
 	{
 		while((read = get_next_line(0, &buf)) != 0)
 		{
+			ft_putstr_fd("### ", fd);
 			ft_putstr_fd(buf, fd);
 			ft_putchar_fd('\n',fd);
 			found = ft_strstr(buf, "Piece");
@@ -287,7 +509,8 @@ int	main(void)
 					printf("piece complete \n");
 					ft_putstr_fd("piece complete\n", fd);
 					print_map(piece, fd);
-					place_piece(piece, map, player, fd);
+					ft_putstr_fd("going into place_piece\n", fd);
+					place_piece(piece, map, &player, fd);
 					ft_putstr_fd("coming out of place_piece\n", fd);
 
 					row_num = 0;
@@ -296,8 +519,10 @@ int	main(void)
 			}
 			ft_strdel(&buf);
 		}
-		//ft_putstr_fd("printing map\n", fd);
-		//print_map(map, fd);
+		//place_piece(piece, map, &player, fd);
+
+		ft_putstr_fd("printing map\n", fd);
+		print_map(map, fd);
 
 		//fd = open("logs.txt", O_WRONLY);
 		
