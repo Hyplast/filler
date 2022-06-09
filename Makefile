@@ -6,13 +6,17 @@
 #    By: severi <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 00:48:33 by severi            #+#    #+#              #
-#    Updated: 2022/05/02 16:10:36 by severi           ###   ########.fr        #
+#    Updated: 2022/06/09 12:58:21 by severi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ssavukos.filler
 
-SRCS = ft_filler.c
+SRCS = ft_filler.c \
+ft_algorithm.c \
+ft_pieces.c \
+ft_map.c \
+ft_util.c 
 
 SRC_DIR = srcs/
 
@@ -26,8 +30,8 @@ LINK = -L libft -lft
 
 LIBFT = libft/libft.a
 
-FLAGS = -Wall -Wextra -Werror -Wconversion -g 
-#FLAGS = -Wall -Wextra -Werror -Wconversion -g -fsanitize=address
+#FLAGS = -Wall -Wextra -Werror -Wconversion -g 
+FLAGS = -Wall -Wextra -Werror -Wconversion -g -fsanitize=address
 
 all: $(NAME)
 
