@@ -11,3 +11,46 @@
 /* ************************************************************************** */
 
 #include "filler.h"
+
+void	free_base(t_base **base)
+{
+	int	i;
+
+	i = 0;
+	while (i < (*base)->height)
+	{
+		free((*base)->contents[i++]);
+	}
+	free((*base)->contents);
+	free((*base));
+}
+
+void	insert_piece(int x, int y)
+{
+	//printf("%d %d\n", player->x, player->y);
+	ft_putnbr_fd(x ,1);
+	ft_putchar_fd(' ', 1);
+	ft_putnbr_fd(y ,1);
+	ft_putchar_fd('\n', 1);
+}
+
+
+int	get_dim(char *str, int d)
+{
+	int i;
+	int j;
+
+	j = 0;
+	i = 0;
+	while (j != d)
+	{
+		while (str[i] != ' ')
+			i++;
+		i++;
+		j++;
+	}
+	j = 0;
+	while (ft_isdigit(str[i + j]) == 1)
+		j++;
+	return (ft_atoi(ft_strsub(str, (unsigned int)i, (unsigned int)j)));
+}

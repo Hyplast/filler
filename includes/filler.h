@@ -32,4 +32,16 @@ typedef struct	s_base
 	int			length;
 }				t_base;
 
+int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd);
+void	print_map(t_base *map, int fd);
+void	update_map(t_base **map, char *row);
+t_base	*create_empty(int height, int length);
+int		overlays(t_base *piece, t_base *map, t_player *player, int fd);
+void	place_piece(t_base *piece, t_base *map, t_player **player, int fd);
+int		fit_piece(t_base *piece, t_base *map, t_player **player, int fd);
+int		update_piece(t_base **piece, char *row);
+int		get_dim(char *str, int d);
+void	insert_piece(int x, int y);
+void	free_base(t_base **base);
+
 #endif
