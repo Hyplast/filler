@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:51:14 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 20:39:08 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 22:12:29 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,10 @@ int dist_n_away(t_base *piece, t_base *map, t_player *player, int dist, int fd)
 		j = -1 * dist;
 		i++;
 	}
-	if (dist > 6)
+	if (dist > map->length - 4)
 		return (dist);
-	ft_putstr_fd("Inside dis_n_away: ", fd);
-	ft_putnbr_fd(dist , fd);
+//	ft_putstr_fd("Inside dis_n_away: ", fd);
+//	ft_putnbr_fd(dist , fd);
 //	ft_putstr_fd(": i = ", fd);	
 //	ft_putnbr_fd(i , fd);
 //	ft_putchar_fd('\n', fd);

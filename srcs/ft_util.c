@@ -6,23 +6,34 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:49:39 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 21:20:17 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 21:57:50 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
+
+void	free_player(t_player **player)
+{	
+	if (player == NULL)
+		return ;
+	free((*player));
+	(*player) = NULL;
+}
 
 void	free_base(t_base **base)
 {
 	int	i;
 
 	i = 0;
+	if (base == NULL)
+		return ;
 	while (i < (*base)->height)
 	{
 		free((*base)->contents[i++]);
 	}
 	free((*base)->contents);
 	free((*base));
+	(*base) = NULL;
 }
 
 void	insert_piece(int x, int y)

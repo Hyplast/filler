@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:38:19 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 20:48:24 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 22:07:05 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,52 +161,42 @@ int	main(void)
 	int		read;
 	int		row_num;
 	char	*found;
+	int		end;
 	t_player	*player;
 	t_base	*map;
 	t_base	*piece;
 
+	end = 0;
 	read = 1;
 	row_num = 0;
 	player = set_up_player();
 	fd = open("logs.txt", O_WRONLY);
 	ft_putstr_fd("STARTING NEW LOGGING\n\n", fd);
-	//map = create_map1(25, 15);
-	//print_map(map);
-//	while(1)
-//	{
-		//fd = open("logs.txt", O_WRONLY);
-		//perror("Error printed by perror: ");
-		//ft_putstr_fd("8 2\n", 0);
-		//ft_putstr_fd("8 2\n", 1);
-		//ft_putnbr(fd);
-		//close(fd);
-
-		read = get_next_line(0, &buf);
-		found = ft_strstr(buf, "exec p1");
-		ft_putchar_fd('\n',fd);
-		ft_putstr_fd(buf, fd);
-		ft_putchar_fd('\n',fd);
-		if (found == NULL)
-			exchange_player_chars(player);
-		found = NULL;
-		ft_putchar_fd('P',fd);
-		
-
-		ft_putstr_fd(ft_itoa(player->player_num), fd);
-		ft_putchar_fd('\n',fd);
-		free(buf);
-		read = get_next_line(0, &buf);
-		found = ft_strstr(buf, "Plateau");
-		if (found != NULL)
-		{
-			map = create_empty(get_dim(buf, 1), get_dim(buf, 2));
-			print_map(map, fd);
-		}
-		found = NULL;
-	
-	while(1)
+	read = get_next_line(0, &buf);
+	found = ft_strstr(buf, "exec p1");
+	ft_putchar_fd('\n',fd);
+	ft_putstr_fd(buf, fd);
+	ft_putchar_fd('\n',fd);
+	if (found == NULL)
+		exchange_player_chars(player);
+	found = NULL;
+	ft_putchar_fd('P',fd);
+//	ft_putstr_fd(ft_itoa(player->player_num), fd);
+	ft_putchar_fd('\n',fd);
+	ft_strdel(&buf);
+//	free(buf);
+	read = get_next_line(0, &buf);
+	found = ft_strstr(buf, "Plateau");
+	if (found != NULL)
 	{
-		while((read = get_next_line(0, &buf)) != 0)
+		map = create_empty(get_dim(buf, 1), get_dim(buf, 2));
+		print_map(map, fd);
+	}
+	found = NULL;
+	ft_strdel(&buf);
+	while(1 && end == 0)
+	{
+		while((read = get_next_line(0, &buf)) != 0 && end == 0)
 		{
 			ft_putstr_fd("### ", fd);
 			ft_putstr_fd(buf, fd);
@@ -217,54 +207,27 @@ int	main(void)
 			else if (found != NULL)
 			{
 				piece = create_empty(get_dim(buf, 1), get_dim(buf, 2));
-			//	ft_putstr_fd("piece read\n", fd);
-			//	print_map(piece, fd);
-			//	ft_putstr_fd("piece printed\n", fd);
-
 				found = NULL;
 			}
 			else if (buf[0] == '.' || buf[0] == '*')
 			{
-			//	ft_putstr_fd("going into update\n", fd);
 				row_num = row_num + update_piece(piece, buf);
-			//	ft_putstr_fd("coming out of update\n", fd);
-			//	ft_putnbr_fd(piece->height, fd);
-			//	ft_putstr_fd(" == ", fd);
-			//	ft_putnbr_fd(row_num, fd);
-			//	ft_putstr_fd(" are they equal?\n", fd);
-
-
 				if (piece->height == row_num)	
 				{
-			//		printf("piece complete \n");
-			//		ft_putstr_fd("piece complete\n", fd);
-			//		print_map(piece, fd);
-			//		ft_putstr_fd("going into place_piece\n", fd);
-					place_piece(piece, map, player, fd);
-			//		ft_putstr_fd("coming out of place_piece\n", fd);
-
+					end = place_piece(piece, map, player, fd);
 					row_num = 0;
 					free_base(&piece);
 				}
 			}
 			ft_strdel(&buf);
 		}
-		//place_piece(piece, map, &player, fd);
-
-		ft_putstr_fd("printing map\n", fd);
-		ft_putstr_fd("player: ", fd);
-		ft_putchar_fd(player->player_char, fd);
-		ft_putstr_fd("\n", fd);
-		print_map(map, fd);
-
-		//fd = open("logs.txt", O_WRONLY);
 		
-		//ft_putstr_fd(buf, fd);
-		//ft_putchar_fd('\n',fd);
-		//ft_putchar('\n');
-		//ft_putstr(buf);
-		//ft_putchar('\n');
+//		ft_putstr_fd("printing map\n", fd);
+//		ft_putstr_fd("player: ", fd);
+//		ft_putchar_fd(player->player_char, fd);
+//		ft_putstr_fd("\n", fd);
+//		print_map(map, fd);
+		//fd = open("logs.txt", O_WRONLY);
 	}
-
 	return (0);
 }

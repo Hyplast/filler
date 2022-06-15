@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:46:19 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 20:56:47 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 22:13:35 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,10 @@ void	map_replace_new_chars(t_base *map)
 
 	i = 0;
 	j = 0;
-	// ft_putstr_fd("\nINSIDE of map_replace_new_chars\n", fd);
-	// ft_putstr_fd("Map HEIGHT : ", fd);
-	// ft_putnbr_fd(map->height , fd);
-	// ft_putstr_fd(" and LENGHT : ", fd);
-	// ft_putnbr_fd(map->height , fd);
-	// ft_putchar_fd('\n', fd);
 	while (i < map->height)
 	{
 		while (j < map->length)
 		{
-			// ft_putstr_fd(" <- map content : ", fd);
-			// ft_putchar_fd((char)map->contents[i][j] , fd);
-			// ft_putchar_fd('\n', fd);
-			
 			if (map->contents[i][j] == 'x')
 				map->contents[i][j] = 'X';
 			else if (map->contents[i][j] == 'o')
@@ -45,60 +35,22 @@ void	map_replace_new_chars(t_base *map)
 	}
 }
 
-void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
+int	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 {
-//	int	i;
-//	int	j;
-
-//	i = 0;
-//	j = 0;
-/*	while (map->height > i)
-	{
-		while (map->length > j)
-//		while (map->contents[i][j] != player->player_char && 
-//				map->contents[i][j] != player->last_pos) 
-		{
-			if (map->contents[i][j] == player->player_char || 
-				map->contents[i][j] == player->last_pos)
-			{
-				player->x = i;
-				player->y = j;
-			}
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-*/
 	map_replace_new_chars(map);
-//	ft_putstr_fd("going into fit_piece\n", fd);
-
 	if (fit_piece(piece, map, player, fd) == 0)
 	{
 		ft_putchar_fd('\n', fd);
 		ft_putstr_fd("ERROR: Piece doesnt fit anywhere\n", fd);
 		insert_piece(0, 0);
-		free_base(&piece);
+		free_player(&player);
 		free_base(&map);
 		close(fd);
-		exit(1);
+		return (1);
 	}
-//	le_algo()
 	insert_piece(piece->x, piece->y);
-	
-//	ft_putstr_fd("\ninserted: ", fd);
-//	ft_putnbr_fd(piece->x ,fd);
 	ft_putchar_fd(' ', fd);
-//	ft_putnbr_fd(piece->y ,fd);
-//	ft_putchar_fd('\n', fd);
-
-
-//	chk_piece_fit(piece, map);
-
-//	piece.contents[][]
-//	if (piece->height != map->height)
-//		ft_putstr_fd("8 3\n", 1);
-	
+	return (0);
 }
 
 int		fit_piece(t_base *piece, t_base *map, t_player *player, int fd)
@@ -120,13 +72,6 @@ int		fit_piece(t_base *piece, t_base *map, t_player *player, int fd)
 		{
 			player->x = i;
 			player->y = j;
-//			ft_putstr_fd("into outside_of_map: ", fd);
-//			ft_putnbr_fd(player->x , fd);
-//			ft_putchar_fd(',', fd);	
-//			ft_putnbr_fd(player->y , fd);
-			// ft_putchar_fd('\n', fd);	
-//			ft_putstr_fd("\n <- map content : ", fd);
-//			ft_putnbr_fd(map->contents[i][j] , fd);
 			ft_putchar_fd('=', fd);	
 //			ft_putnbr_fd(player->player_char , fd);
 			// ft_putstr_fd(" or :", fd);
