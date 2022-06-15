@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:49:00 by severi            #+#    #+#             */
-/*   Updated: 2022/06/09 12:49:12 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 13:07:22 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
  * Create an structure of height x length dimensions of '.''s
  * @params height
  * @params length
+ * @return base (t_base)
  */
 t_base	*create_empty(int height, int length)
 {
@@ -39,6 +40,9 @@ t_base	*create_empty(int height, int length)
 	}
 	base->height = height;
 	base->length = length;
+	base->size = length * height;
+	base->x = 0;
+	base->y = 0;
 	return (base);
 }
 
@@ -82,6 +86,9 @@ void print_map(t_base *map, int fd)
 	}
 }
 
+/*
+ *	Check if piece placed would be outside of map.
+ */
 int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 {
 	int	i;
@@ -93,7 +100,7 @@ int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 	{
 		while (j < piece->length)
 		{
-			ft_putstr_fd("inside outside_of_map: ", fd);
+//			ft_putstr_fd("inside outside_of_map: ", fd);
 			ft_putnbr_fd(player->x , fd);
 			// ft_putchar_fd(',', fd);	
 			// ft_putnbr_fd(player->y , fd);

@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:38:19 by severi            #+#    #+#             */
-/*   Updated: 2022/05/07 05:46:05 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 13:24:26 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	fnd_clo_ene(t_base *map, t_player *player)
 //1	.**
 //
 
-int		overlays(t_base *piece, t_base *map, t_player *player, int fd)
+int		try_to_fit_it(t_base *piece, t_base *map, t_player *player, int fd)
 {
 	int	count;
 	int	i;
@@ -130,18 +130,16 @@ int		overlays(t_base *piece, t_base *map, t_player *player, int fd)
 		while (j < piece->length)
 		{
 //			ft_putstr_fd("piece content : ", fd);
-	
 //			ft_putchar_fd((char)(piece->contents[i][j]), fd);
-			ft_putstr_fd(" map content : ", fd);
-	
+		//	ft_putstr_fd(" map content : ", fd);
 			ft_putchar_fd((char)(map->contents[player->x + i][player->y + j]), fd);
 //			ft_putchar_fd('\n', fd);	
-
-
 			if (piece->contents[i][j] == '*')
 			{
-				if (map->contents[player->x + i][player->y + j] != '.')
+				if (map->contents[player->x + i][player->y + j] == player->player_char)
 					count++;
+				if (map->contents[player->x + i][player->y + j] == player->enemy_char)
+					count += 10;
 			}
 			j++;
 		}
@@ -151,7 +149,6 @@ int		overlays(t_base *piece, t_base *map, t_player *player, int fd)
 //	ft_putstr_fd("number of overlays: ", fd);
 //	ft_putnbr_fd(count,fd);
 //	ft_putstr_fd(" \n", fd);
-
 	return (count);
 }
 /*
@@ -163,7 +160,6 @@ void	try_piece(t_base *piece, t_base *map, t_player *player)
 					if (count == 1)
 						return (1);
 				}
-
 }
 */
 
@@ -189,9 +185,6 @@ int	main(void)
 	ft_putstr_fd("STARTING NEW LOGGING\n\n", fd);
 	//map = create_map1(25, 15);
 	//print_map(map);
-
-
-	
 //	while(1)
 //	{
 		//fd = open("logs.txt", O_WRONLY);

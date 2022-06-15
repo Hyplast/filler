@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:46:19 by severi            #+#    #+#             */
-/*   Updated: 2022/06/09 12:46:37 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 13:25:46 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	place_piece(t_base *piece, t_base *map, t_player **player, int fd)
 	ft_putstr_fd("going into fit_piece\n", fd);
 
 	fit_piece(piece, map, player, fd);
+//	le_algo()
 	insert_piece((*player)->x, (*player)->y);
 	
 	ft_putstr_fd("inserted: ", fd);
@@ -64,9 +65,9 @@ int		fit_piece(t_base *piece, t_base *map, t_player **player, int fd)
 
 	i = 0;
 	j = 0;
-	while (i < map->height)
+	while (i + piece->height <= map->height)
 	{
-		while (j < map->length)
+		while (j + piece->length <= map->length)
 		{
 			(*player)->x = i;
 			(*player)->y = j;
@@ -97,9 +98,9 @@ int		fit_piece(t_base *piece, t_base *map, t_player **player, int fd)
 //			 && !outside_of_map(piece, map, (*player), fd))
 			if (!outside_of_map(piece, map, (*player), fd))
 			{
-				ft_putstr_fd("going into overlays\n", fd);
+				//ft_putstr_fd("going into overlays\n", fd);
 
-				if (overlays(piece, map, (*player), fd) == 1)
+				if (try_to_fit_it(piece, map, (*player), fd) == 1)
 					return (1);
 			}
 			j++;
