@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:46:19 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 13:25:46 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 20:25:16 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 	}
 */
 	map_replace_new_chars(map);
-	ft_putstr_fd("going into fit_piece\n", fd);
+//	ft_putstr_fd("going into fit_piece\n", fd);
 
 	if (fit_piece(piece, map, player, fd) == 0)
 	{
@@ -82,11 +82,11 @@ void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 //	le_algo()
 	insert_piece(piece->x, piece->y);
 	
-	ft_putstr_fd("\ninserted: ", fd);
-	ft_putnbr_fd(piece->x ,fd);
+//	ft_putstr_fd("\ninserted: ", fd);
+//	ft_putnbr_fd(piece->x ,fd);
 	ft_putchar_fd(' ', fd);
-	ft_putnbr_fd(piece->y ,fd);
-	ft_putchar_fd('\n', fd);
+//	ft_putnbr_fd(piece->y ,fd);
+//	ft_putchar_fd('\n', fd);
 
 
 //	chk_piece_fit(piece, map);
@@ -116,26 +116,26 @@ int		fit_piece(t_base *piece, t_base *map, t_player *player, int fd)
 		{
 			player->x = i;
 			player->y = j;
-			ft_putstr_fd("into outside_of_map: ", fd);
-			ft_putnbr_fd(player->x , fd);
-			ft_putchar_fd(',', fd);	
-			ft_putnbr_fd(player->y , fd);
+//			ft_putstr_fd("into outside_of_map: ", fd);
+//			ft_putnbr_fd(player->x , fd);
+//			ft_putchar_fd(',', fd);	
+//			ft_putnbr_fd(player->y , fd);
 			// ft_putchar_fd('\n', fd);	
-			ft_putstr_fd("\n <- map content : ", fd);
-			ft_putnbr_fd(map->contents[i][j] , fd);
+//			ft_putstr_fd("\n <- map content : ", fd);
+//			ft_putnbr_fd(map->contents[i][j] , fd);
 			ft_putchar_fd('=', fd);	
-			ft_putnbr_fd(player->player_char , fd);
+//			ft_putnbr_fd(player->player_char , fd);
 			// ft_putstr_fd(" or :", fd);
 			// ft_putnbr_fd((*player)->last_pos , fd);
-			ft_putchar_fd('\n', fd);
+//			ft_putchar_fd('\n', fd);
 /*
 			if (!outside_of_map(piece, map, (*player), fd))
 				ft_putstr_fd(" outside_of_map is true : \n", fd);
 */
-			ft_putnbr_fd(piece->length , fd);
-			ft_putchar_fd(',', fd);	
-			ft_putnbr_fd(piece->height , fd);
-			ft_putchar_fd('\n', fd);
+//			ft_putnbr_fd(piece->length , fd);
+//			ft_putchar_fd(',', fd);	
+//			ft_putnbr_fd(piece->height , fd);
+//			ft_putchar_fd('\n', fd);
 //			if ((map->contents[i][j] == (*player)->player_char || 
 //				map->contents[i][j] == (*player)->last_pos) 
 //			 && !outside_of_map(piece, map, (*player), fd))
@@ -177,10 +177,10 @@ int		try_to_fit_it(t_base *piece, t_base *map, t_player *player, int fd)
 		while (j < piece->length)
 		{
 
-			ft_putstr_fd(" <- piece content : ", fd);
-			ft_putchar_fd((char)(piece->contents[i][j]), fd);
-			ft_putstr_fd("\n <- map content :    ", fd);
-			ft_putchar_fd((char)(map->contents[player->x + i][player->y + j]), fd);
+	//		ft_putstr_fd(" <- piece content : ", fd);
+	//		ft_putchar_fd((char)(piece->contents[i][j]), fd);
+	//		ft_putstr_fd("\n <- map content :    ", fd);
+	//		ft_putchar_fd((char)(map->contents[player->x + i][player->y + j]), fd);
 			// ft_putchar_fd('\n', fd);	
 			if (piece->contents[i][j] == '*')
 			{
@@ -194,9 +194,9 @@ int		try_to_fit_it(t_base *piece, t_base *map, t_player *player, int fd)
 		j = 0;
 		i++;
 	}
-	ft_putstr_fd("number of count: ", fd);
-	ft_putnbr_fd(count,fd);
-	ft_putstr_fd(" \n", fd);
+//	ft_putstr_fd("number of count: ", fd);
+//	ft_putnbr_fd(count,fd);
+ft_putstr_fd("L", fd);
 	return (count);
 }
 

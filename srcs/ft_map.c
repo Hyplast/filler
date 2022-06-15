@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:49:00 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 13:07:22 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 20:27:49 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,85 @@ void print_map(t_base *map, int fd)
 	}
 }
 
+
+int	check_empty_rows(t_base *piece, int fd)
+{
+	int	empty;
+	int	i;
+	int j;
+
+	i = piece->height - 1;
+	j = piece->length - 1;
+	empty = 0;
+//	ft_putstr_fd("\ncheck rows: [",fd);
+//	ft_putnbr_fd(i, fd);
+//	ft_putstr_fd("],[", fd);
+//	ft_putnbr_fd(j, fd);
+//	ft_putstr_fd("] = ", fd);
+//	ft_putchar_fd((char)piece->contents[i][j], fd);
+	ft_putchar_fd('c', fd);
+	while (i > 0 && piece->contents[i][j] != '*')
+	{
+		while (j > 0 && piece->contents[i][j] != '*')
+		{
+//			ft_putstr_fd("\ninside j loop in rows: [",fd);
+//			ft_putnbr_fd(i, fd);
+//			ft_putstr_fd("],[", fd);
+////			ft_putnbr_fd(j, fd);
+	//		ft_putstr_fd("]\n", fd);
+			j--;
+		}
+		if (piece->contents[i][j] != '*')
+		{
+			empty++;
+			j = piece->length - 1;
+			i--;
+		}
+	}	
+//	ft_putstr_fd("surviced rows!\n", fd);
+	return (empty); 
+}
+
+
+int	check_empty_columns(t_base *piece, int fd)
+{
+	int	empty;
+	int	i;
+	int j;
+
+	i = 0;
+	j = piece->length - 1;
+	empty = 0;
+//	ft_putstr_fd("\ncheck columns: [",fd);
+//	ft_putnbr_fd(i, fd);
+//	ft_putstr_fd("],[", fd);
+//	ft_putnbr_fd(j, fd);
+//	ft_putstr_fd("] = ", fd);
+//	ft_putchar_fd((char)piece->contents[i][j], fd);
+	ft_putchar_fd('r', fd);
+
+	while (j > 0 && piece->contents[i][j] != '*')
+	{
+		while (i < piece->height - 1 && piece->contents[i][j] != '*')
+		{
+//			ft_putstr_fd("\ninside i loop in columns: [",fd);
+//			ft_putnbr_fd(i, fd);
+//			ft_putstr_fd("],[", fd);
+//			ft_putnbr_fd(j, fd);
+//			ft_putstr_fd("]\n", fd);
+			i++;
+		}
+		if (piece->contents[i][j] != '*')
+		{
+			empty++;
+			i = 0;
+			j--;
+		}
+	}
+//	ft_putstr_fd("surviced columns!\n", fd);
+	return (empty); 
+}
+
 /*
  *	Check if piece placed would be outside of map.
  */
@@ -93,21 +172,32 @@ int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 {
 	int	i;
 	int	j;
-	
+	int	rows;
+	int	columns;
+
 	i = 0;
 	j = 0;
+	rows = check_empty_rows(piece, fd);
+	columns = check_empty_columns(piece, fd);
+//			ft_putchar_fd('\n', fd);
+//			 ft_putnbr_fd(rows, fd);
+//			 ft_putstr_fd(" <-empty rows, empty columns ->", fd);
+		//	 ft_putnbr_fd(i , fd);
+			 ft_putchar_fd(',', fd);	
+//			 ft_putnbr_fd(columns , fd);
+//			ft_putchar_fd('\n', fd);
 	while (i < piece->height)
 	{
 		while (j < piece->length)
 		{
 //			ft_putstr_fd("inside outside_of_map: ", fd);
-			ft_putnbr_fd(player->x , fd);
-			// ft_putchar_fd(',', fd);	
-			// ft_putnbr_fd(player->y , fd);
-			// ft_putstr_fd(" i,j :", fd);
-			// ft_putnbr_fd(i , fd);
-			// ft_putchar_fd(',', fd);	
-			// ft_putnbr_fd(j , fd);
+//			ft_putnbr_fd(player->x , fd);
+//			 ft_putchar_fd(',', fd);	
+			// ft_putnbr_fd(rows, fd);
+		//	 ft_putstr_fd(" <-empty rows, empty columns ->", fd);
+		//	 ft_putnbr_fd(i , fd);
+		//	 ft_putchar_fd(',', fd);	
+		//	 ft_putnbr_fd(columns , fd);
 			// ft_putstr_fd(" length, height :", fd);
 
 			// ft_putnbr_fd(piece->length , fd);
@@ -123,8 +213,8 @@ int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 			// ft_putnbr_fd(map->length - player->y, fd);
 			// ft_putchar_fd('\n', fd);
 
-			if (piece->height + i > map->height - player->x 
-				|| piece->length + j > map->length - player->y)
+			if (piece->height - rows + i > map->height - player->x 
+				|| piece->length - columns + j > map->length - player->y)
 				return (1);
 			j++;
 		}
