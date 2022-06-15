@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:39:24 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 14:20:13 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 20:47:42 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct	s_base
 
 int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd);
 void	print_map(t_base *map, int fd);
-void	update_map(t_base **map, char *row);
+void	update_map(t_base *map, char *row);
 t_base	*create_empty(int height, int length);
 int		try_to_fit_it(t_base *piece, t_base *map, t_player *player, int fd);
 void	place_piece(t_base *piece, t_base *map, t_player *player, int fd);

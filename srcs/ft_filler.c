@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:38:19 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 13:24:26 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 20:48:24 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ int	main(void)
 			ft_putchar_fd('\n',fd);
 			found = ft_strstr(buf, "Piece");
 			if (ft_isdigit(buf[0]) == 1)
-				update_map(&map, buf);
+				update_map(map, buf);
 			else if (found != NULL)
 			{
 				piece = create_empty(get_dim(buf, 1), get_dim(buf, 2));

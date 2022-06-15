@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:49:39 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 20:28:15 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 21:20:17 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ int	get_dim(char *str, int d)
 {
 	int i;
 	int j;
+	int	result;
+	char	*temp;
+	
 
 	j = 0;
 	i = 0;
@@ -52,5 +55,8 @@ int	get_dim(char *str, int d)
 	j = 0;
 	while (ft_isdigit(str[i + j]) == 1)
 		j++;
-	return (ft_atoi(ft_strsub(str, (unsigned int)i, (unsigned int)j)));
+	temp = ft_strsub(str, (unsigned int)i, (unsigned int)j);
+	result = ft_atoi(temp);
+	ft_strdel(&temp); 
+	return (result);
 }

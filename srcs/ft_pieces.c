@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:46:19 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 20:25:16 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 20:56:47 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 	{
 		ft_putchar_fd('\n', fd);
 		ft_putstr_fd("ERROR: Piece doesnt fit anywhere\n", fd);
+		insert_piece(0, 0);
+		free_base(&piece);
+		free_base(&map);
+		close(fd);
 		exit(1);
 	}
 //	le_algo()

@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:49:00 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 20:27:49 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 21:36:39 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,21 +46,24 @@ t_base	*create_empty(int height, int length)
 	return (base);
 }
 
-void	update_map(t_base **map, char *row)
+void	update_map(t_base *map, char *row)
 {
 	int	j;
 	int i;
 	int k;
+	char	*temp;
 
 	i = 0;
 	j = 0;
 	k = 0;
 	while (row[i] != ' ')
 		i++;
-	j = ft_atoi(ft_strsub(row, 0, (size_t)i++));
+	temp = ft_strsub(row, 0, (size_t)i++);
+	j = ft_atoi(temp);
+	ft_strdel(&temp);
 	while ((size_t)i < ft_strlen(row))
 	{
-		(*map)->contents[j][k++] = (int)row[i++];
+		map->contents[j][k++] = (int)row[i++];
 	}
 }
 
@@ -170,15 +173,22 @@ int	check_empty_columns(t_base *piece, int fd)
  */
 int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 {
-	int	i;
-	int	j;
+//	int	i;
+//	int	j;
 	int	rows;
 	int	columns;
 
-	i = 0;
-	j = 0;
+//	i = 0;
+//	j = 0;
 	rows = check_empty_rows(piece, fd);
 	columns = check_empty_columns(piece, fd);
+			if (piece->height - rows  > map->height - player->x 
+				|| piece->length - columns  > map->length - player->y)
+			{
+				ft_putstr_fd("\nBEHOLD, THIS WAS OUTSIDE oF MAP\n", fd);	
+				return (1);
+			}
+/*
 //			ft_putchar_fd('\n', fd);
 //			 ft_putnbr_fd(rows, fd);
 //			 ft_putstr_fd(" <-empty rows, empty columns ->", fd);
@@ -198,11 +208,29 @@ int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 		//	 ft_putnbr_fd(i , fd);
 		//	 ft_putchar_fd(',', fd);	
 		//	 ft_putnbr_fd(columns , fd);
-			// ft_putstr_fd(" length, height :", fd);
+			 ft_putstr_fd(" piece->height - rows > map->height - player->x  = [", fd);
+			 ft_putnbr_fd(piece->height , fd);
+			 ft_putstr_fd("] - [", fd);	
+			 ft_putnbr_fd(rows , fd);
+			 ft_putstr_fd("] + [", fd);	
+			 ft_putnbr_fd(i , fd);
+			 ft_putstr_fd("] > [", fd);	
+			 ft_putnbr_fd(map->height , fd);
+			 ft_putstr_fd("] - [", fd);	
+			 ft_putnbr_fd(player->x, fd);
+			 ft_putstr_fd("]\n", fd);
+			ft_putstr_fd(" piece->length - columns  > map->lenght - player->y  = [", fd);
+			 ft_putnbr_fd(piece->length , fd);
+			 ft_putstr_fd("] - [", fd);	
+			 ft_putnbr_fd(columns , fd);
+			 ft_putstr_fd("] + [", fd);	
+			 ft_putnbr_fd(j , fd);
+			 ft_putstr_fd("] > [", fd);	
+			 ft_putnbr_fd(map->length , fd);
+			 ft_putstr_fd("] - [", fd);	
+			 ft_putnbr_fd(player->y, fd);
+			 ft_putstr_fd("]\n", fd);
 
-			// ft_putnbr_fd(piece->length , fd);
-			// ft_putchar_fd(',', fd);	
-			// ft_putnbr_fd(piece->height , fd);
 			// ft_putstr_fd(" kolme ", fd);	
 			// ft_putnbr_fd(piece->height + i, fd);
 			// ft_putchar_fd('>', fd); 
@@ -213,13 +241,17 @@ int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd)
 			// ft_putnbr_fd(map->length - player->y, fd);
 			// ft_putchar_fd('\n', fd);
 
-			if (piece->height - rows + i > map->height - player->x 
-				|| piece->length - columns + j > map->length - player->y)
+			if (piece->height - rows  > map->height - player->x 
+				|| piece->length - columns  > map->length - player->y)
+			{
+				ft_putstr_fd("\nBEHOLD, THIS WAS OUTSIDE oF MAP\n", fd);	
 				return (1);
+			}
 			j++;
 		}
 		j = 0;
 		i++;
 	}
+*/
 	return (0);
 }
