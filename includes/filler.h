@@ -6,7 +6,7 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:39:24 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 21:57:36 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 23:04:22 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 
 # include "libft.h"
 # include "get_next_line.h"
+//#include <stdio.h>
+# include <unistd.h>
+# include <fcntl.h>
 
-typedef struct	s_player
+typedef struct s_player
 {
 	int			player_num;
 	char		player_char;
@@ -25,11 +28,9 @@ typedef struct	s_player
 	char		enemy_last_pos;
 	int			x;
 	int			y;
-	int			new_x;
-	int			new_y;
 }				t_player;
 
-typedef struct	s_base
+typedef struct s_base
 {
 	int			**contents;
 	int			height;
@@ -40,19 +41,19 @@ typedef struct	s_base
 	int			y;
 }				t_base;
 
-int		outside_of_map(t_base *piece, t_base *map, t_player *player, int fd);
+int		outside_of_map(t_base *piece, t_base *map, t_player *player);
 void	print_map(t_base *map, int fd);
 void	update_map(t_base *map, char *row);
 t_base	*create_empty(int height, int length);
-int		try_to_fit_it(t_base *piece, t_base *map, t_player *player, int fd);
+int		try_to_fit_it(t_base *piece, t_base *map, t_player *player);
 int		place_piece(t_base *piece, t_base *map, t_player *player, int fd);
-int		fit_piece(t_base *piece, t_base *map, t_player *player, int fd);
+int		fit_piece(t_base *piece, t_base *map, t_player *player);
 int		update_piece(t_base *piece, char *row);
 int		get_dim(char *str, int d);
 void	insert_piece(int x, int y);
 void	free_base(t_base **base);
 void	free_player(t_player **player);
-float	le_algo(t_base *piece, t_base *map, t_player *player, int fd);
-int		dist_n_away(t_base *piece, t_base *map, t_player *player, int dist, int fd);
+float	do_the_algo(t_base *piece, t_base *map, t_player *player);
+int		dist_n_away(t_base *piece, t_base *map, t_player *player, int dist);
 
 #endif

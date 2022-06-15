@@ -6,11 +6,46 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:49:39 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 21:57:50 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 22:58:33 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
+
+/*
+ * Create an structure of height x length dimensions of '.''s
+ * @params height
+ * @params length
+ * @return base (t_base)
+ */
+t_base	*create_empty(int height, int length)
+{
+	int		i;
+	int		j;
+	t_base	*base;
+
+	i = 0;
+	j = 0;
+	base = (t_base *) malloc(sizeof(t_base));
+	base->contents = (int **) malloc(sizeof(int *) * (long unsigned int)height);
+	while (i < height)
+		base->contents[i++] = (int *)malloc(sizeof(int)
+				* (long unsigned int)length);
+	i = 0;
+	while (i < height)
+	{
+		while (j < length)
+			base->contents[i][j++] = 46;
+		j = 0;
+		i++;
+	}
+	base->height = height;
+	base->length = length;
+	base->size = length * height;
+	base->x = 0;
+	base->y = 0;
+	return (base);
+}
 
 void	free_player(t_player **player)
 {	
@@ -38,21 +73,18 @@ void	free_base(t_base **base)
 
 void	insert_piece(int x, int y)
 {
-	//printf("%d %d\n", player->x, player->y);
-	ft_putnbr_fd(x ,1);
+	ft_putnbr_fd(x, 1);
 	ft_putchar_fd(' ', 1);
-	ft_putnbr_fd(y ,1);
+	ft_putnbr_fd(y, 1);
 	ft_putchar_fd('\n', 1);
 }
 
-
 int	get_dim(char *str, int d)
 {
-	int i;
-	int j;
-	int	result;
+	int		i;
+	int		j;
+	int		result;
 	char	*temp;
-	
 
 	j = 0;
 	i = 0;
@@ -68,6 +100,6 @@ int	get_dim(char *str, int d)
 		j++;
 	temp = ft_strsub(str, (unsigned int)i, (unsigned int)j);
 	result = ft_atoi(temp);
-	ft_strdel(&temp); 
+	ft_strdel(&temp);
 	return (result);
 }

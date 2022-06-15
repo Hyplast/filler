@@ -6,44 +6,22 @@
 /*   By: severi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 12:51:14 by severi            #+#    #+#             */
-/*   Updated: 2022/06/15 22:12:29 by severi           ###   ########.fr       */
+/*   Updated: 2022/06/15 23:06:11 by severi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
 
-
-/*			player
- *		   player_char = 'X'
- *		   enemy_char = 'O'; x = 0 and y=1
- */
-
-/*			piece
- *		   y012		size = 9; 
- *		  0 .*.		height = 3
- *		  1 .*.		length = 3
- *		x 2 ...		non_empty = 2
- */
-
-/*			map
- *		   y01234
- *		  0 .....	size = 25
- *		  1 ..X..	height = 5
- *		  2 .OOO.	length = 5
- *		x 3 .....	non_empty = 4
- */
-
-// if (map->contents[player->x][player->y] == 'X' && 
 /*
  *	Loop through piece and if it is '*' find the distance to 
  *	nearest enemy. Calculate the average distance for all
  *	of the '*'.
  */
-float	loop_piece(t_base *piece, t_base *map, t_player *player, int dist, int fd)
+float	loop_piece(t_base *piece, t_base *map, t_player *player, int dist)
 {
-	int	i;
-	int	j;
-	int	count;
+	int		i;
+	int		j;
+	int		count;
 	float	sum;
 
 	i = -1;
@@ -58,7 +36,7 @@ float	loop_piece(t_base *piece, t_base *map, t_player *player, int dist, int fd)
 			{
 				map->x = i + player->x;
 				map->y = j + player->y;
-				sum += (float)dist_n_away(piece, map, player, dist, fd);
+				sum += (float)dist_n_away(piece, map, player, dist);
 				count++;
 			}
 		}
@@ -67,30 +45,11 @@ float	loop_piece(t_base *piece, t_base *map, t_player *player, int dist, int fd)
 	return (sum / (float)count);
 }
 
-
-//     01234567890123456
-// 000 .................
-// 001 .................
-// 002 .................
-// 003 .................
-// 004 .................
-// 005 .................
-// 006 .................
-// 007 .................
-// 008 ..O..............
-// 009 .................
-// 010 .................
-// 011 .................
-// 012 ..............X..
-// 013 .................
-// 014 .................
-// xxx 001234567890123
-
 /*
  * 	Find the distance to nearest enemy char. Recursively increase the distance.
  *	@return (int) Distance to neareast enemy char.
  */
-int dist_n_away(t_base *piece, t_base *map, t_player *player, int dist, int fd)
+int	dist_n_away(t_base *piece, t_base *map, t_player *player, int dist)
 {
 	int	i;
 	int	j;
@@ -114,83 +73,15 @@ int dist_n_away(t_base *piece, t_base *map, t_player *player, int dist, int fd)
 	}
 	if (dist > map->length - 4)
 		return (dist);
-//	ft_putstr_fd("Inside dis_n_away: ", fd);
-//	ft_putnbr_fd(dist , fd);
-//	ft_putstr_fd(": i = ", fd);	
-//	ft_putnbr_fd(i , fd);
-//	ft_putchar_fd('\n', fd);
-	return (dist_n_away(piece, map, player, dist + 1, fd));
+	return (dist_n_away(piece, map, player, dist + 1));
 }
 
-/*		   y01234
- *		  0 .....
- *		  1 ..XX.
- *		  2 .OOO.
- *		x 3 .....
- */
-/*
-static int	calc_dist_to_enemy(t_base *piece, t_base *map, t_player player)
-{
-	int	distance;
-	int	i;
-	int j;
-	float	sum;
-
-	distance = 1;
-	i = 0;
-	j = 0;
-	sum = 0;
-	while (i < map->height)
-	{
-		while (j < map->length)
-		{
-			if (map->contents[i][x] == player->char_char)
-				
-			while (piece->non_empty < 4)
-				sum += dist_n_away(piece, map, player, distance); 
-			j++;		
-		}
-		j = 0;
-		i++;
-	}
-	
-	
-	return (0);
-}
-*/
-
-float	le_algo(t_base *piece, t_base *map, t_player *player, int fd)
+float	do_the_algo(t_base *piece, t_base *map, t_player *player)
 {
 	int				distance;
-	// static float	best_avg_dist_to_enemy;;
 	float			avg_distance_to_enemy;
 
-	// if (player->x == 0 && player->y == 0)
-	// 	best_avg_dist_to_enemy = 0;
 	distance = 1;
-	avg_distance_to_enemy = loop_piece(piece, map, player, distance, fd);
-	// if (avg_distance_to_enemy > best_avg_dist_to_enemy)
-	// {
-	// 	best_avg_dist_to_enemy = avg_distance_to_enemy;
-	// 	piece->x = player->x;
-	// 	piece->y = player->y;
-	// }
+	avg_distance_to_enemy = loop_piece(piece, map, player, distance);
 	return (avg_distance_to_enemy);
 }	
-/*	while (i < map->height)
-	{
-		while (j < map->length)
-		{
-			if (piece->contents[i][j] == player->player)
-				avg_distance_to_enemy = calc_dist_to_enemy();
-			if (avg_distance_to_enemy > best_avg_dist_to_enemy)
-			{
-				
-			}
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-}
-*/
