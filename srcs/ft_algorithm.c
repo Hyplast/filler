@@ -133,14 +133,14 @@ static int	calc_dist_to_enemy(t_base *piece, t_base *map, t_player player)
 }
 */
 
-void	le_algo(t_base *piece, t_base *map, t_player *player)
+float	le_algo(t_base *piece, t_base *map, t_player *player)
 {
 	int				distance;
 	static float	best_avg_dist_to_enemy;;
 	float			avg_distance_to_enemy;
 
-	if (player->x == 0 && player->y == 0)
-		best_avg_dist_to_enemy = 0;
+	// if (player->x == 0 && player->y == 0)
+	// 	best_avg_dist_to_enemy = 0;
 	distance = 1;
 	avg_distance_to_enemy = loop_piece(piece, map, player, distance);
 	if (avg_distance_to_enemy > best_avg_dist_to_enemy)
@@ -149,6 +149,7 @@ void	le_algo(t_base *piece, t_base *map, t_player *player)
 		piece->x = player->x;
 		piece->y = player->y;
 	}
+	return (avg_distance_to_enemy);
 }	
 /*	while (i < map->height)
 	{

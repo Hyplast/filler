@@ -51,7 +51,7 @@ int		update_piece(t_base **piece, char *row);
 int		get_dim(char *str, int d);
 void	insert_piece(int x, int y);
 void	free_base(t_base **base);
-void	le_algo(t_base *piece, t_base *map, t_player *player);
+float	le_algo(t_base *piece, t_base *map, t_player *player);
 int		dist_n_away(t_base *piece, t_base *map, t_player *player, int dist);
 
 #endif

@@ -116,41 +116,6 @@ void	fnd_clo_ene(t_base *map, t_player *player)
 //1	.**
 //
 
-int		try_to_fit_it(t_base *piece, t_base *map, t_player *player, int fd)
-{
-	int	count;
-	int	i;
-	int	j;
-	
-	i = 0;
-	j = 0;
-	count = 0;
-	while (i < piece->height)
-	{
-		while (j < piece->length)
-		{
-//			ft_putstr_fd("piece content : ", fd);
-//			ft_putchar_fd((char)(piece->contents[i][j]), fd);
-		//	ft_putstr_fd(" map content : ", fd);
-			ft_putchar_fd((char)(map->contents[player->x + i][player->y + j]), fd);
-//			ft_putchar_fd('\n', fd);	
-			if (piece->contents[i][j] == '*')
-			{
-				if (map->contents[player->x + i][player->y + j] == player->player_char)
-					count++;
-				if (map->contents[player->x + i][player->y + j] == player->enemy_char)
-					count += 10;
-			}
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-//	ft_putstr_fd("number of overlays: ", fd);
-//	ft_putnbr_fd(count,fd);
-//	ft_putstr_fd(" \n", fd);
-	return (count);
-}
 /*
 void	try_piece(t_base *piece, t_base *map, t_player *player)
 {
