@@ -39,7 +39,7 @@
  *	nearest enemy. Calculate the average distance for all
  *	of the '*'.
  */
-float	loop_piece(t_base *piece, t_base *map, t_player *player, int dist)
+float	loop_piece(t_base *piece, t_base *map, t_player *player, int dist, int fd)
 {
 	int	i;
 	int	j;
@@ -58,7 +58,7 @@ float	loop_piece(t_base *piece, t_base *map, t_player *player, int dist)
 			{
 				map->x = i + player->x;
 				map->y = j + player->y;
-				sum += (float)dist_n_away(piece, map, player, dist);
+				sum += (float)dist_n_away(piece, map, player, dist, fd);
 				count++;
 			}
 		}
@@ -67,23 +67,42 @@ float	loop_piece(t_base *piece, t_base *map, t_player *player, int dist)
 	return (sum / (float)count);
 }
 
+
+//     01234567890123456
+// 000 .................
+// 001 .................
+// 002 .................
+// 003 .................
+// 004 .................
+// 005 .................
+// 006 .................
+// 007 .................
+// 008 ..O..............
+// 009 .................
+// 010 .................
+// 011 .................
+// 012 ..............X..
+// 013 .................
+// 014 .................
+// xxx 001234567890123
+
 /*
  * 	Find the distance to nearest enemy char. Recursively increase the distance.
  *	@return (int) Distance to neareast enemy char.
  */
-int dist_n_away(t_base *piece, t_base *map, t_player *player, int dist)
+int dist_n_away(t_base *piece, t_base *map, t_player *player, int dist, int fd)
 {
 	int	i;
 	int	j;
 
 	i = -1 * dist;
 	j = -1 * dist;
-	while (i <= dist)
+	while (i < dist)
 	{
-		while (j <= dist)
+		while (j < dist)
 		{
-			if (i + map->x >= 0 && j + map->y >= 0
-				&& i + map->x <= map->height && j + map->y <= map->length)
+			if (i + map->x > 0 && j + map->y > 0
+				&& i + map->x < map->height && j + map->y < map->length)
 			{
 				if (map->contents[map->x + i][map->y + j] == player->enemy_char)
 					return (dist);
@@ -93,7 +112,14 @@ int dist_n_away(t_base *piece, t_base *map, t_player *player, int dist)
 		j = -1 * dist;
 		i++;
 	}
-	return (dist_n_away(piece, map, player, dist + 1));
+	if (dist > 4)
+		return (dist);
+	ft_putstr_fd("Inside dis_n_away: ", fd);
+	ft_putnbr_fd(dist , fd);
+	ft_putstr_fd(": i = ", fd);	
+	ft_putnbr_fd(i , fd);
+	ft_putchar_fd('\n', fd);
+	return (dist_n_away(piece, map, player, dist + 1, fd));
 }
 
 /*		   y01234
@@ -133,22 +159,22 @@ static int	calc_dist_to_enemy(t_base *piece, t_base *map, t_player player)
 }
 */
 
-float	le_algo(t_base *piece, t_base *map, t_player *player)
+float	le_algo(t_base *piece, t_base *map, t_player *player, int fd)
 {
 	int				distance;
-	static float	best_avg_dist_to_enemy;;
+	// static float	best_avg_dist_to_enemy;;
 	float			avg_distance_to_enemy;
 
 	// if (player->x == 0 && player->y == 0)
 	// 	best_avg_dist_to_enemy = 0;
 	distance = 1;
-	avg_distance_to_enemy = loop_piece(piece, map, player, distance);
-	if (avg_distance_to_enemy > best_avg_dist_to_enemy)
-	{
-		best_avg_dist_to_enemy = avg_distance_to_enemy;
-		piece->x = player->x;
-		piece->y = player->y;
-	}
+	avg_distance_to_enemy = loop_piece(piece, map, player, distance, fd);
+	// if (avg_distance_to_enemy > best_avg_dist_to_enemy)
+	// {
+	// 	best_avg_dist_to_enemy = avg_distance_to_enemy;
+	// 	piece->x = player->x;
+	// 	piece->y = player->y;
+	// }
 	return (avg_distance_to_enemy);
 }	
 /*	while (i < map->height)

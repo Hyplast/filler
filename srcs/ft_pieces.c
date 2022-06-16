@@ -45,7 +45,7 @@ void	map_replace_new_chars(t_base *map)
 	}
 }
 
-void	place_piece(t_base *piece, t_base *map, t_player **player, int fd)
+void	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 {
 //	int	i;
 //	int	j;
@@ -97,7 +97,7 @@ void	place_piece(t_base *piece, t_base *map, t_player **player, int fd)
 	
 }
 
-int		fit_piece(t_base *piece, t_base *map, t_player **player, int fd)
+int		fit_piece(t_base *piece, t_base *map, t_player *player, int fd)
 {
 	int	i;
 	int	j;
@@ -114,17 +114,17 @@ int		fit_piece(t_base *piece, t_base *map, t_player **player, int fd)
 	{
 		while (j + piece->length <= map->length)
 		{
-			(*player)->x = i;
-			(*player)->y = j;
+			player->x = i;
+			player->y = j;
 			ft_putstr_fd("into outside_of_map: ", fd);
-			ft_putnbr_fd((*player)->x , fd);
+			ft_putnbr_fd(player->x , fd);
 			ft_putchar_fd(',', fd);	
-			ft_putnbr_fd((*player)->y , fd);
+			ft_putnbr_fd(player->y , fd);
 			// ft_putchar_fd('\n', fd);	
 			ft_putstr_fd("\n <- map content : ", fd);
 			ft_putnbr_fd(map->contents[i][j] , fd);
 			ft_putchar_fd('=', fd);	
-			ft_putnbr_fd((*player)->player_char , fd);
+			ft_putnbr_fd(player->player_char , fd);
 			// ft_putstr_fd(" or :", fd);
 			// ft_putnbr_fd((*player)->last_pos , fd);
 			ft_putchar_fd('\n', fd);
@@ -139,17 +139,17 @@ int		fit_piece(t_base *piece, t_base *map, t_player **player, int fd)
 //			if ((map->contents[i][j] == (*player)->player_char || 
 //				map->contents[i][j] == (*player)->last_pos) 
 //			 && !outside_of_map(piece, map, (*player), fd))
-			if (!outside_of_map(piece, map, (*player), fd))
+			if (!outside_of_map(piece, map, player, fd))
 			{
 				//ft_putstr_fd("going into overlays\n", fd);
-				if (try_to_fit_it(piece, map, (*player), fd) == 1)
+				if (try_to_fit_it(piece, map, player, fd) == 1)
 				{
-					last_move = le_algo(piece, map, (*player));
-					if (last_move > best_move)
+					last_move = le_algo(piece, map, player, fd);
+					if (last_move < best_move)
 					{
 						best_move = last_move;
-						piece->x = (*player)->x;
-						piece->y = (*player)->y;
+						piece->x = player->x;
+						piece->y = player->y;
 					}
 					fits = 1;
 				}
@@ -176,9 +176,10 @@ int		try_to_fit_it(t_base *piece, t_base *map, t_player *player, int fd)
 	{
 		while (j < piece->length)
 		{
-			ft_putstr_fd("\n <- piece content : ", fd);
+
+			ft_putstr_fd(" <- piece content : ", fd);
 			ft_putchar_fd((char)(piece->contents[i][j]), fd);
-			ft_putstr_fd("\n <- map content : ", fd);
+			ft_putstr_fd("\n <- map content :    ", fd);
 			ft_putchar_fd((char)(map->contents[player->x + i][player->y + j]), fd);
 			// ft_putchar_fd('\n', fd);	
 			if (piece->contents[i][j] == '*')
@@ -200,19 +201,19 @@ int		try_to_fit_it(t_base *piece, t_base *map, t_player *player, int fd)
 }
 
 
-int	update_piece(t_base **piece, char *row)
+int	update_piece(t_base *piece, char *row)
 {
 	static int i;
 	int	j;
 
 	j = 0;
-	while ((*piece)->length > j)
+	while (piece->length > j)
 	{	
-		(*piece)->contents[i][j] = row[j];
+		piece->contents[i][j] = row[j];
 		j++;
 	}
 	i++;
-	if (i == (*piece)->height)
+	if (i == piece->height)
 		i = 0;
 	return (1);
 }

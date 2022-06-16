@@ -45,13 +45,13 @@ void	print_map(t_base *map, int fd);
 void	update_map(t_base **map, char *row);
 t_base	*create_empty(int height, int length);
 int		try_to_fit_it(t_base *piece, t_base *map, t_player *player, int fd);
-void	place_piece(t_base *piece, t_base *map, t_player **player, int fd);
-int		fit_piece(t_base *piece, t_base *map, t_player **player, int fd);
-int		update_piece(t_base **piece, char *row);
+void	place_piece(t_base *piece, t_base *map, t_player *player, int fd);
+int		fit_piece(t_base *piece, t_base *map, t_player *player, int fd);
+int		update_piece(t_base *piece, char *row);
 int		get_dim(char *str, int d);
 void	insert_piece(int x, int y);
 void	free_base(t_base **base);
-float	le_algo(t_base *piece, t_base *map, t_player *player);
-int		dist_n_away(t_base *piece, t_base *map, t_player *player, int dist);
+float	le_algo(t_base *piece, t_base *map, t_player *player, int fd);
+int		dist_n_away(t_base *piece, t_base *map, t_player *player, int dist, int fd);
 
 #endif

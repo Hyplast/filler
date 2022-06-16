@@ -128,6 +128,32 @@ void	try_piece(t_base *piece, t_base *map, t_player *player)
 }
 */
 
+
+
+static t_player	*set_up_player(void)
+{
+	t_player	*player;
+
+	player = (t_player*)malloc(sizeof(t_player));
+	player->player_num = 1;
+	player->player_char = 'O';
+	player->last_pos = 'o';
+	player->enemy_char = 'X';
+	player->enemy_last_pos = 'x';
+	player->x = 0;
+	player->y = 0;
+	return (player);
+	}
+
+static void	exchange_player_chars(t_player *player)
+{
+	player->player_num = 2;
+	player->player_char = 'X';
+	player->last_pos = 'x';
+	player->enemy_char = 'O';
+	player->enemy_last_pos = 'o';
+}
+
 int	main(void)
 {
 	char	*buf;
@@ -141,12 +167,8 @@ int	main(void)
 
 	read = 1;
 	row_num = 0;
-	player = (t_player*)malloc(sizeof(t_player));
-	player->player_num = 1;
-	player->player_char = 'O';
-	player->last_pos = 'o';
+	player = set_up_player();
 	fd = open("logs.txt", O_WRONLY);
-	
 	ft_putstr_fd("STARTING NEW LOGGING\n\n", fd);
 	//map = create_map1(25, 15);
 	//print_map(map);
@@ -165,13 +187,10 @@ int	main(void)
 		ft_putstr_fd(buf, fd);
 		ft_putchar_fd('\n',fd);
 		if (found == NULL)
-		{
-			player->player_num = 2;
-			player->player_char = 'X';
-			player->last_pos = 'x';
-		}
+			exchange_player_chars(player);
 		found = NULL;
 		ft_putchar_fd('P',fd);
+		
 
 		ft_putstr_fd(ft_itoa(player->player_num), fd);
 		ft_putchar_fd('\n',fd);
@@ -207,7 +226,7 @@ int	main(void)
 			else if (buf[0] == '.' || buf[0] == '*')
 			{
 			//	ft_putstr_fd("going into update\n", fd);
-				row_num = row_num + update_piece(&piece, buf);
+				row_num = row_num + update_piece(piece, buf);
 			//	ft_putstr_fd("coming out of update\n", fd);
 			//	ft_putnbr_fd(piece->height, fd);
 			//	ft_putstr_fd(" == ", fd);
@@ -221,7 +240,7 @@ int	main(void)
 			//		ft_putstr_fd("piece complete\n", fd);
 			//		print_map(piece, fd);
 			//		ft_putstr_fd("going into place_piece\n", fd);
-					place_piece(piece, map, &player, fd);
+					place_piece(piece, map, player, fd);
 			//		ft_putstr_fd("coming out of place_piece\n", fd);
 
 					row_num = 0;
