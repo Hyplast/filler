@@ -44,17 +44,21 @@ typedef struct s_base
 	int			y;
 }				t_base;
 
-int		outside_of_map(t_base *piece, t_base *map, t_player *player);
-void	print_map(t_base *map, int fd);
-void	update_map(t_base *map, char *row);
-void	map_replace_new_chars(t_base *map);
-t_base	*create_empty(int height, int length);
-int		place_piece(t_base *piece, t_base *map, t_player *player, int fd);
-int		update_piece(t_base *piece, char *row);
-int		get_dim(char *str, int d);
-void	insert_piece(int x, int y, int fd);
-void	free_base(t_base **base);
-void	free_player(t_player **player);
-float	do_the_algo(t_base *piece, t_base *map, t_player *player);
+int			outside_of_map(t_base *piece, t_base *map, t_player *player);
+void		print_map(t_base *map, int fd);
+void		update_map(t_base *map, char *row);
+void		map_replace_new_chars(t_base *map);
+t_base		*create_empty(int height, int length);
+int			place_piece(t_base *piece, t_base *map, t_player *player);
+int			update_piece(t_base *piece, char *row);
+int			get_dim(char *str, int d);
+void		insert_piece(int x, int y);
+void		free_base(t_base **base);
+void		free_player(t_player **player);
+float		do_the_algo(t_base *piece, t_base *map, t_player *player);
+void		put_logs(char *buf, int fd);
+void		exchange_player_chars(t_player *player);
+t_player	*set_up_player(void);
+int			set_up_logging(void);
 
 #endif

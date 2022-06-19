@@ -12,48 +12,7 @@
 
 #include "filler.h"
 
-static t_player	*set_up_player(void)
-{
-	t_player	*player;
-
-	player = (t_player *) malloc(sizeof(t_player));
-	player->player_num = 1;
-	player->player_char = 'O';
-	player->last_pos = 'o';
-	player->enemy_char = 'X';
-	player->enemy_last_pos = 'x';
-	player->x = 0;
-	player->y = 0;
-	player->best_move = 100;
-	player->last_move = 100;
-	player->fits = 0;
-	return (player);
-}
-
-static void	exchange_player_chars(t_player *player)
-{
-	player->player_num = 2;
-	player->player_char = 'X';
-	player->last_pos = 'x';
-	player->enemy_char = 'O';
-	player->enemy_last_pos = 'o';
-}
-
-int	set_up_logging(void)
-{
-	int	fd;
-
-	fd = open("logs.txt", O_WRONLY);
-	if (fd < 0 || fd >= 4096)
-	{
-		perror("Error: ");
-		exit(-1);
-	}
-	ft_putstr_fd("STARTING NEW LOGGING\n\n", fd);
-	return (fd);
-}
-
-t_base	*get_player_and_map(t_player *player, char *buf, int fd)
+static t_base	*get_player_and_map(t_player *player, char *buf, int fd)
 {
 	int		read;
 	char	*found;
@@ -82,66 +41,63 @@ t_base	*get_player_and_map(t_player *player, char *buf, int fd)
 	return (map);
 }
 
+static int	piece_loop(t_base *piece, t_base *map, t_player *player, char *buf)
+{
+	static int	row_num;
+	int			end;
+
+	end = 0;
+	row_num = row_num + update_piece(piece, buf);
+	if (piece->height == row_num)
+	{
+		end = place_piece(piece, map, player);
+		row_num = 0;
+		free_base(&piece);
+	}
+	return (end);
+}
+
+static void	main_while(t_base *map, t_player *player, int fd, char *buf)
+{
+	char	*found;
+	int		end;
+	t_base	*piece;
+
+	end = 0;
+	while (get_next_line(0, &buf) != 0 && end == 0)
+	{
+		put_logs(buf, fd);
+		found = ft_strstr(buf, "Piece");
+		if (ft_isdigit(buf[0]) == 1)
+			update_map(map, buf);
+		else if (found != NULL)
+		{
+			piece = create_empty(get_dim(buf, 1), get_dim(buf, 2));
+			found = NULL;
+		}
+		else if (buf[0] == '.' || buf[0] == '*')
+			end = piece_loop(piece, map, player, buf);
+		ft_strdel(&buf);
+	}
+}
+
 int	main(void)
 {
 	char		*buf;
 	int			fd;
-	int			read;
-	int			row_num;
-	char		*found;
-	int			end;
 	t_player	*player;
 	t_base		*map;
-	t_base		*piece;
 
-	end = 0;
-	read = 1;
-	row_num = 0;
 	player = set_up_player();
 	fd = set_up_logging();
+	buf = ft_strnew(1);
 	map = get_player_and_map(player, buf, fd);
-	// read = get_next_line(0, &buf);
-	// found = ft_strstr(buf, "exec p1");
-	// if (found == NULL)
-	// 	exchange_player_chars(player);
-	// found = NULL;
-	// ft_strdel(&buf);
-	// read = get_next_line(0, &buf);
-	// found = ft_strstr(buf, "Plateau");
-	// if (found != NULL)
-	// {
-	// 	map = create_empty(get_dim(buf, 1), get_dim(buf, 2));
-	// 	print_map(map, fd);
-	// }
-	// found = NULL;
-	// ft_strdel(&buf);
-	while (1 && end == 0)
-	{
-		while ((read = get_next_line(0, &buf)) != 0 && end == 0)
-		{
-			ft_putstr_fd("### ", fd);
-			ft_putstr_fd(buf, fd);
-			ft_putchar_fd('\n', fd);
-			found = ft_strstr(buf, "Piece");
-			if (ft_isdigit(buf[0]) == 1)
-				update_map(map, buf);
-			else if (found != NULL)
-			{
-				piece = create_empty(get_dim(buf, 1), get_dim(buf, 2));
-				found = NULL;
-			}
-			else if (buf[0] == '.' || buf[0] == '*')
-			{
-				row_num = row_num + update_piece(piece, buf);
-				if (piece->height == row_num)
-				{
-					end = place_piece(piece, map, player, fd);
-					row_num = 0;
-					free_base(&piece);
-				}
-			}
-			ft_strdel(&buf);
-		}
-	}
+	main_while(map, player, fd, buf);
+	ft_putchar_fd('\n', fd);
+	ft_putstr_fd("ERROR: Piece doesn't fit anywhere\n", fd);
+	insert_piece(0, 0);
+	free_player(&player);
+	free_base(&map);
+	close(fd);
 	return (0);
 }

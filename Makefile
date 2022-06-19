@@ -17,7 +17,8 @@ ft_algorithm.c \
 ft_pieces.c \
 ft_place_piece.c \
 ft_map.c \
-ft_util.c 
+ft_util.c \
+ft_util_2.c 
 
 SRCS = $(addprefix srcs/, $(SRC))
 
@@ -39,12 +40,14 @@ CFLAGS = -Wall -Werror -Wextra
 
 DEBUG_FLAGS = -Wconversion -g -fsanitize=address
 
+DEBUG_NAME = ssavukos.filler
+
 all: dir $(NAME)
 
 $(NAME): $(OBJS)
 	@make -C libft/
 	@$(CC) $(CFLAGS) -I $(INC) -I $(LIB_INC) $(OBJS) -L $(LIBDIR) -lft -o $(NAME)
-	@echo "project compiled"
+	@echo "project \"$(NAME)\" compiled"
 
 dir:
 	@mkdir -p $(OBJ_DIR)
@@ -52,13 +55,14 @@ dir:
 $(OBJS): obj/%.o : srcs/%.c
 	@$(CC) $(CFLAGS) -I $(INC) -I $(LIB_INC) -c $< -o $@ 
 
-$(OBJS_DEBUG): obj/%.o : srcs/%.c
-	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -I $(LIB_INC) -c $< -o $@ 
-
-debug: dir $(OBJS_DEBUG)
+debug: dir $(OBJS_DEBUG) $(DEBUG_NAME)
 	@make debug -C libft/
 	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -I $(LIB_INC) $(OBJS) -L $(LIBDIR) -lft -o $(NAME)
 	@echo Project \"$(NAME)\" compiled with debugging flags
+
+$(OBJS_DEBUG): obj/%.o : srcs/%.c
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -I $(LIB_INC) -c $< -o $@ 
+
 
 clean:
 	@make clean -C libft/

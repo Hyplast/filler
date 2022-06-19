@@ -83,19 +83,13 @@ static int	fit_piece(t_base *piece, t_base *map, t_player *player)
 	return (player->fits);
 }
 
-int	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
+int	place_piece(t_base *piece, t_base *map, t_player *player)
 {
 	map_replace_new_chars(map);
 	if (fit_piece(piece, map, player) == 0)
 	{
-		ft_putchar_fd('\n', fd);
-		ft_putstr_fd("ERROR: Piece doesnt fit anywhere\n", fd);
-		insert_piece(0, 0, fd);
-		free_player(&player);
-		free_base(&map);
-		close(fd);
 		return (1);
 	}
-	insert_piece(piece->x, piece->y, fd);
+	insert_piece(piece->x, piece->y);
 	return (0);
 }

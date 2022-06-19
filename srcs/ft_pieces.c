@@ -79,13 +79,8 @@ int	update_piece(t_base *piece, char *row)
 	return (1);
 }
 
-void	insert_piece(int x, int y, int fd)
+void	insert_piece(int x, int y)
 {
-	ft_putstr_fd("Inserted piece in: [", fd);
-	ft_putnbr_fd(x, fd);
-	ft_putstr_fd("],[", fd);
-	ft_putnbr_fd(y, fd);
-	ft_putstr_fd("]\n", fd);
 	ft_putnbr_fd(x, 1);
 	ft_putchar_fd(' ', 1);
 	ft_putnbr_fd(y, 1);
