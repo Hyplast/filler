@@ -39,6 +39,49 @@ static void	exchange_player_chars(t_player *player)
 	player->enemy_last_pos = 'o';
 }
 
+int	set_up_logging(void)
+{
+	int	fd;
+
+	fd = open("logs.txt", O_WRONLY);
+	if (fd < 0 || fd >= 4096)
+	{
+		perror("Error: ");
+		exit(-1);
+	}
+	ft_putstr_fd("STARTING NEW LOGGING\n\n", fd);
+	return (fd);
+}
+
+t_base	*get_player_and_map(t_player *player, char *buf, int fd)
+{
+	int		read;
+	char	*found;
+	t_base	*map;
+
+	read = get_next_line(0, &buf);
+	if (read == 0)
+	{
+		perror("Error no input in stdin: ");
+		exit(-1);
+	}
+	found = ft_strstr(buf, "exec p1");
+	if (found == NULL)
+		exchange_player_chars(player);
+	found = NULL;
+	ft_strdel(&buf);
+	read = get_next_line(0, &buf);
+	found = ft_strstr(buf, "Plateau");
+	if (found != NULL)
+	{
+		map = create_empty(get_dim(buf, 1), get_dim(buf, 2));
+		print_map(map, fd);
+	}
+	found = NULL;
+	ft_strdel(&buf);
+	return (map);
+}
+
 int	main(void)
 {
 	char		*buf;
@@ -55,23 +98,23 @@ int	main(void)
 	read = 1;
 	row_num = 0;
 	player = set_up_player();
-	fd = open("logs.txt", O_WRONLY);
-	ft_putstr_fd("STARTING NEW LOGGING\n\n", fd);
-	read = get_next_line(0, &buf);
-	found = ft_strstr(buf, "exec p1");
-	if (found == NULL)
-		exchange_player_chars(player);
-	found = NULL;
-	ft_strdel(&buf);
-	read = get_next_line(0, &buf);
-	found = ft_strstr(buf, "Plateau");
-	if (found != NULL)
-	{
-		map = create_empty(get_dim(buf, 1), get_dim(buf, 2));
-		print_map(map, fd);
-	}
-	found = NULL;
-	ft_strdel(&buf);
+	fd = set_up_logging();
+	map = get_player_and_map(player, buf, fd);
+	// read = get_next_line(0, &buf);
+	// found = ft_strstr(buf, "exec p1");
+	// if (found == NULL)
+	// 	exchange_player_chars(player);
+	// found = NULL;
+	// ft_strdel(&buf);
+	// read = get_next_line(0, &buf);
+	// found = ft_strstr(buf, "Plateau");
+	// if (found != NULL)
+	// {
+	// 	map = create_empty(get_dim(buf, 1), get_dim(buf, 2));
+	// 	print_map(map, fd);
+	// }
+	// found = NULL;
+	// ft_strdel(&buf);
 	while (1 && end == 0)
 	{
 		while ((read = get_next_line(0, &buf)) != 0 && end == 0)

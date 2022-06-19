@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include "get_next_line.h"
+# include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
 
@@ -51,7 +52,7 @@ t_base	*create_empty(int height, int length);
 int		place_piece(t_base *piece, t_base *map, t_player *player, int fd);
 int		update_piece(t_base *piece, char *row);
 int		get_dim(char *str, int d);
-void	insert_piece(int x, int y);
+void	insert_piece(int x, int y, int fd);
 void	free_base(t_base **base);
 void	free_player(t_player **player);
 float	do_the_algo(t_base *piece, t_base *map, t_player *player);

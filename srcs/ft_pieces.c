@@ -79,8 +79,13 @@ int	update_piece(t_base *piece, char *row)
 	return (1);
 }
 
-void	insert_piece(int x, int y)
+void	insert_piece(int x, int y, int fd)
 {
+	ft_putstr_fd("Inserted piece in: [", fd);
+ 	ft_putnbr_fd(x, fd);
+	ft_putstr_fd("],[", fd);
+	ft_putnbr_fd(y, fd);
+	ft_putstr_fd("]\n", fd);
 	ft_putnbr_fd(x, 1);
 	ft_putchar_fd(' ', 1);
 	ft_putnbr_fd(y, 1);
@@ -97,6 +102,8 @@ int	outside_of_map(t_base *piece, t_base *map, t_player *player)
 
 	rows = check_empty_rows(piece);
 	columns = check_empty_columns(piece);
+	// columns = 0;
+	// rows = 0;
 	if (piece->height - rows > map->height - player->x + 1
 		|| piece->length - columns > map->length - player->y + 1)
 		return (1);

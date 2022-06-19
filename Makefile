@@ -12,43 +12,53 @@
 
 NAME = ssavukos.filler
 
-SRCS = ft_filler.c \
+SRC = ft_filler.c \
 ft_algorithm.c \
 ft_pieces.c \
 ft_place_piece.c \
 ft_map.c \
 ft_util.c 
 
-SRC_DIR = srcs/
+SRCS = $(addprefix srcs/, $(SRC))
 
-OBJ = $(SRCS:.c=.o)
+OBJ = $(SRC:.c=.o)
+
+OBJS = $(addprefix obj/, $(SRC:.c=.o))
+
+INC = includes/
+
+LIBDIR = libft/
+
+LIB_INC = libft/includes/
 
 OBJ_DIR = obj/
 
-INCLUDES = -I libft/includes -I includes/
+CC = gcc
 
-LINK = -L libft -lft
+CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address
 
-LIBFT = libft/libft.a
+all: dir $(NAME)
 
-#FLAGS = -Wall -Wextra -Werror -Wconversion -g 
-FLAGS = -Wall -Wextra -Werror -Wconversion -g -fsanitize=address
+$(NAME): $(OBJS)
+	@make -C libft/
+	@$(CC) $(CFLAGS) -I $(INC) -I $(LIB_INC) $(OBJS) -L $(LIBDIR) -lft -o $(NAME)
+	@echo "project compiled"
 
-all: $(NAME)
+dir:
+	@mkdir -p $(OBJ_DIR)
 
-$(NAME): $(LIBFT)
-	gcc -c $(FLAGS) $(addprefix $(SRC_DIR), $(SRCS)) $(INCLUDES)
-	mkdir -p $(OBJ_DIR)
-	mv $(OBJ) $(OBJ_DIR)
-	gcc $(FLAGS) $(addprefix $(OBJ_DIR), $(OBJ)) -o $(NAME) $(LINK)
-$(LIBFT):
-	make -s -C libft
-clean: 
-	make -s -C libft/ clean
-	rm -rf obj
+$(OBJS): obj/%.o : srcs/%.c
+	@$(CC) $(CFLAGS) -I $(INC) -I $(LIB_INC) -c $< -o $@ 
+
+clean:
+	@make clean -C libft/
+	@rm -f $(OBJ)
+	@rm -f -r $(OBJ_DIR)
+	@echo "project cleaned, removed *.o files"
 
 fclean: clean
-	rm -rf $(NAME)
-	make -s -C libft/ fclean
+	@make fclean -C libft/
+	@rm -f $(NAME)
+	@echo "removed $(NAME)"
 
 re: fclean all
