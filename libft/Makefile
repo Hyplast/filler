@@ -6,7 +6,7 @@
 #    By: severi <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/30 18:43:06 by severi            #+#    #+#              #
-#    Updated: 2022/06/09 12:44:22 by severi           ###   ########.fr        #
+#    Updated: 2022/02/11 15:44:42 by severi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ ft_strstr.c \
 ft_strnstr.c \
 ft_isalpha.c \
 ft_isdigit.c \
+ft_issign.c \
 ft_isalnum.c \
 ft_isprint.c \
 ft_isascii.c \
@@ -57,7 +58,13 @@ ft_strtrim.c \
 ft_strjoin.c \
 ft_strsplit.c \
 ft_itoa.c \
+ft_litoa.c \
+ft_llitoa.c \
 ft_utoa.c \
+ft_lutoa.c \
+ft_count_digits.c \
+ft_count_ldigits.c \
+ft_count_u_digits.c \
 ft_putchar_fd.c \
 ft_putstr_fd.c \
 ft_putendl_fd.c \
@@ -68,29 +75,53 @@ ft_putnbr.c \
 ft_putnbr_fd.c \
 get_next_line.c
 
+SRCS = $(addprefix srcs/, $(SRC))
+
 OBJ = $(SRC:.c=.o)
+
+OBJS = $(addprefix obj/, $(SRC:.c=.o))
 
 INC = includes/
 
+OBJ_DIR = obj/
+
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra -Wconversion -g -fsanitize=address
-# -g -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra
 
-all: $(NAME)
+DEBUG_FLAGS = -Wconversion -g -fsanitize=address
 
-$(NAME):
-	$(CC) $(CFLAGS) -I $(INC) -c $(SRC)
-	ar rc $(NAME) $(OBJ)
-	ranlib $(NAME)
+all: dir $(NAME)
+
+$(NAME): $(OBJS)
+	@ar rc $(NAME) $(OBJS)
+	@ranlib $(NAME)
+	@echo "library compiled"
+
+dir:
+	@mkdir -p $(OBJ_DIR)
+
+$(OBJS): obj/%.o : srcs/%.c
+	@$(CC) $(CFLAGS) -I $(INC) -c $< -o $@ 
 
 clean:
-	rm -f $(OBJ)
+	@rm -f $(OBJ)
+	@rm -f -r $(OBJ_DIR)
+	@echo "library cleaned, removed *.o files"
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
+	@echo "removed $(NAME)"
 
 re: fclean all
+
+$(DEBUG_OBJS): obj/%.o : srcs/%.c
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -c $< -o $@ 
+
+debug:
+	@ar rc $(NAME) $(DEBUG_OBJS)
+	@ranlib $(NAME)
+	@echo Debuggable library successfully created \"$(NAME)\"
 
 so:
 	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)

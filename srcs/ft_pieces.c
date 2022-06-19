@@ -12,115 +12,54 @@
 
 #include "filler.h"
 
-void	map_replace_new_chars(t_base *map)
+static int	check_empty_rows(t_base *piece)
 {
+	int	empty;
+	int	i;
+	int	j;
+
+	i = piece->height - 1;
+	j = piece->length - 1;
+	empty = 0;
+	while (i > 0 && piece->contents[i][j] != '*')
+	{
+		while (j > 0 && piece->contents[i][j] != '*')
+		{
+			j--;
+		}
+		if (piece->contents[i][j] != '*')
+		{
+			empty++;
+			j = piece->length - 1;
+			i--;
+		}
+	}	
+	return (empty);
+}
+
+static int	check_empty_columns(t_base *piece)
+{
+	int	empty;
 	int	i;
 	int	j;
 
 	i = 0;
-	j = 0;
-	while (i < map->height)
+	j = piece->length - 1;
+	empty = 0;
+	while (j > 0 && piece->contents[i][j] != '*')
 	{
-		while (j < map->length)
+		while (i < piece->height - 1 && piece->contents[i][j] != '*')
 		{
-			if (map->contents[i][j] == 'x')
-				map->contents[i][j] = 'X';
-			else if (map->contents[i][j] == 'o')
-				map->contents[i][j] = 'O';
-			j++;
+			i++;
 		}
-		j = 0;
-		i++;
-	}
-}
-
-int	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
-{
-	map_replace_new_chars(map);
-	if (fit_piece(piece, map, player) == 0)
-	{
-		ft_putchar_fd('\n', fd);
-		ft_putstr_fd("ERROR: Piece doesnt fit anywhere\n", fd);
-		insert_piece(0, 0);
-		free_player(&player);
-		free_base(&map);
-		close(fd);
-		return (1);
-	}
-	insert_piece(piece->x, piece->y);
-	ft_putchar_fd(' ', fd);
-	return (0);
-}
-
-int	fit_piece(t_base *piece, t_base *map, t_player *player)
-{
-	int		i;
-	int		j;
-	int		fits;
-	float	best_move;
-	float	last_move;
-
-	last_move = 0;
-	best_move = 100;
-	fits = 0;
-	i = 0;
-	j = 0;
-	while (i + piece->height <= map->height)
-	{
-		while (j + piece->length <= map->length)
+		if (piece->contents[i][j] != '*')
 		{
-			player->x = i;
-			player->y = j;
-			if (!outside_of_map(piece, map, player))
-			{
-				if (try_to_fit_it(piece, map, player) == 1)
-				{
-					last_move = do_the_algo(piece, map, player);
-					if (last_move < best_move)
-					{
-						best_move = last_move;
-						piece->x = player->x;
-						piece->y = player->y;
-					}
-					fits = 1;
-				}
-			}
-			j++;
+			empty++;
+			i = 0;
+			j--;
 		}
-		j = 0;
-		i++;
 	}
-	return (fits);
-}
-
-int	try_to_fit_it(t_base *piece, t_base *map, t_player *player)
-{
-	int	count;
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	count = 0;
-	while (i < piece->height)
-	{
-		while (j < piece->length)
-		{
-			if (piece->contents[i][j] == '*')
-			{
-				if (map->contents[player->x + i][player->y + j]
-					== player->player_char)
-					count++;
-				if (map->contents[player->x + i][player->y + j]
-					== player->enemy_char)
-					count += 10;
-			}
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-	return (count);
+	return (empty);
 }
 
 int	update_piece(t_base *piece, char *row)
@@ -138,4 +77,28 @@ int	update_piece(t_base *piece, char *row)
 	if (i == piece->height)
 		i = 0;
 	return (1);
+}
+
+void	insert_piece(int x, int y)
+{
+	ft_putnbr_fd(x, 1);
+	ft_putchar_fd(' ', 1);
+	ft_putnbr_fd(y, 1);
+	ft_putchar_fd('\n', 1);
+}
+
+/*
+ *	Check if piece placed would be outside of map.
+ */
+int	outside_of_map(t_base *piece, t_base *map, t_player *player)
+{
+	int	rows;
+	int	columns;
+
+	rows = check_empty_rows(piece);
+	columns = check_empty_columns(piece);
+	if (piece->height - rows > map->height - player->x + 1
+		|| piece->length - columns > map->length - player->y + 1)
+		return (1);
+	return (0);
 }
