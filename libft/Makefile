@@ -89,6 +89,8 @@ CC = gcc
 
 CFLAGS = -Wall -Werror -Wextra
 
+DEBUG_FLAGS = -Wconversion -g -fsanitize=address
+
 all: dir $(NAME)
 
 $(NAME): $(OBJS)
@@ -112,6 +114,14 @@ fclean: clean
 	@echo "removed $(NAME)"
 
 re: fclean all
+
+$(DEBUG_OBJS): obj/%.o : srcs/%.c
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -c $< -o $@ 
+
+debug:
+	@ar rc $(NAME) $(DEBUG_OBJS)
+	@ranlib $(NAME)
+	@echo Debuggable library successfully created \"$(NAME)\"
 
 so:
 	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)

@@ -35,7 +35,9 @@ OBJ_DIR = obj/
 
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra
+
+DEBUG_FLAGS = -Wconversion -g -fsanitize=address
 
 all: dir $(NAME)
 
@@ -49,6 +51,14 @@ dir:
 
 $(OBJS): obj/%.o : srcs/%.c
 	@$(CC) $(CFLAGS) -I $(INC) -I $(LIB_INC) -c $< -o $@ 
+
+$(OBJS_DEBUG): obj/%.o : srcs/%.c
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -I $(LIB_INC) -c $< -o $@ 
+
+debug: dir $(OBJS_DEBUG)
+	@make debug -C libft/
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -I $(LIB_INC) $(OBJS) -L $(LIBDIR) -lft -o $(NAME)
+	@echo Project \"$(NAME)\" compiled with debugging flags
 
 clean:
 	@make clean -C libft/

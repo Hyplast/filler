@@ -97,6 +97,5 @@ int	place_piece(t_base *piece, t_base *map, t_player *player, int fd)
 		return (1);
 	}
 	insert_piece(piece->x, piece->y, fd);
-	//ft_putchar_fd(' ', fd);
 	return (0);
 }
