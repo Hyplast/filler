@@ -71,14 +71,6 @@ void	free_base(t_base **base)
 	(*base) = NULL;
 }
 
-void	insert_piece(int x, int y)
-{
-	ft_putnbr_fd(x, 1);
-	ft_putchar_fd(' ', 1);
-	ft_putnbr_fd(y, 1);
-	ft_putchar_fd('\n', 1);
-}
-
 int	get_dim(char *str, int d)
 {
 	int		i;

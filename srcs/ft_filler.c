@@ -24,6 +24,9 @@ static t_player	*set_up_player(void)
 	player->enemy_last_pos = 'x';
 	player->x = 0;
 	player->y = 0;
+	player->best_move = 100;
+	player->last_move = 100;
+	player->fits = 0;
 	return (player);
 }
 

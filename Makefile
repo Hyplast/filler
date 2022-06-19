@@ -15,6 +15,7 @@ NAME = ssavukos.filler
 SRCS = ft_filler.c \
 ft_algorithm.c \
 ft_pieces.c \
+ft_place_piece.c \
 ft_map.c \
 ft_util.c 
 

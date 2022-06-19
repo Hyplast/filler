@@ -12,6 +12,28 @@
 
 #include "filler.h"
 
+void	map_replace_new_chars(t_base *map)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (i < map->height)
+	{
+		while (j < map->length)
+		{
+			if (map->contents[i][j] == 'x')
+				map->contents[i][j] = 'X';
+			else if (map->contents[i][j] == 'o')
+				map->contents[i][j] = 'O';
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+}
+
 void	update_map(t_base *map, char *row)
 {
 	int		j;
@@ -49,70 +71,4 @@ void	print_map(t_base *map, int fd)
 		ft_putchar_fd('\n', fd);
 		i++;
 	}
-}
-
-int	check_empty_rows(t_base *piece)
-{
-	int	empty;
-	int	i;
-	int	j;
-
-	i = piece->height - 1;
-	j = piece->length - 1;
-	empty = 0;
-	while (i > 0 && piece->contents[i][j] != '*')
-	{
-		while (j > 0 && piece->contents[i][j] != '*')
-		{
-			j--;
-		}
-		if (piece->contents[i][j] != '*')
-		{
-			empty++;
-			j = piece->length - 1;
-			i--;
-		}
-	}	
-	return (empty);
-}
-
-int	check_empty_columns(t_base *piece)
-{
-	int	empty;
-	int	i;
-	int	j;
-
-	i = 0;
-	j = piece->length - 1;
-	empty = 0;
-	while (j > 0 && piece->contents[i][j] != '*')
-	{
-		while (i < piece->height - 1 && piece->contents[i][j] != '*')
-		{
-			i++;
-		}
-		if (piece->contents[i][j] != '*')
-		{
-			empty++;
-			i = 0;
-			j--;
-		}
-	}
-	return (empty);
-}
-
-/*
- *	Check if piece placed would be outside of map.
- */
-int	outside_of_map(t_base *piece, t_base *map, t_player *player)
-{
-	int	rows;
-	int	columns;
-
-	rows = check_empty_rows(piece);
-	columns = check_empty_columns(piece);
-	if (piece->height - rows > map->height - player->x
-		|| piece->length - columns > map->length - player->y)
-		return (1);
-	return (0);
 }
