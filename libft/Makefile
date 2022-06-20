@@ -115,14 +115,6 @@ fclean: clean
 
 re: fclean all
 
-$(DEBUG_OBJS): obj/%.o : srcs/%.c
-	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -c $< -o $@ 
-
-debug:
-	@ar rc $(NAME) $(DEBUG_OBJS)
-	@ranlib $(NAME)
-	@echo Debuggable library successfully created \"$(NAME)\"
-
 so:
 	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)
 	gcc -nostartfiles -shared -o libft.so $(OBJ)

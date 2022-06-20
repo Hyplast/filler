@@ -32,10 +32,10 @@ static t_base	*get_player_and_map(t_player *player, char *buf, int fd)
 	read = get_next_line(0, &buf);
 	found = ft_strstr(buf, "Plateau");
 	if (found != NULL)
-	{
 		map = create_empty(get_dim(buf, 1), get_dim(buf, 2));
-		print_map(map, fd);
-	}
+	else
+		map = create_empty(1, 1);
+	print_map(map, fd);
 	found = NULL;
 	ft_strdel(&buf);
 	return (map);

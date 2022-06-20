@@ -16,7 +16,7 @@ int	set_up_logging(void)
 {
 	int	fd;
 
-	fd = open("logs.txt", O_WRONLY);
+	fd = open("logs.txt", O_WRONLY | O_CREAT, 0666);
 	if (fd < 0 || fd >= 4096)
 	{
 		perror("Error: ");

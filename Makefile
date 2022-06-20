@@ -56,12 +56,12 @@ $(OBJS): obj/%.o : srcs/%.c
 	@$(CC) $(CFLAGS) -I $(INC) -I $(LIB_INC) -c $< -o $@ 
 
 debug: dir $(OBJS_DEBUG) $(DEBUG_NAME)
-	@make debug -C libft/
-	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -I $(LIB_INC) $(OBJS) -L $(LIBDIR) -lft -o $(NAME)
+	@make -C libft/
+	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -I $(LIB_INC) $(OBJS) -L $(LIBDIR) -lft -o $(NAME)
 	@echo Project \"$(NAME)\" compiled with debugging flags
 
 $(OBJS_DEBUG): obj/%.o : srcs/%.c
-	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -I $(LIB_INC) -c $< -o $@ 
+	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -I $(INC) -I $(LIB_INC) -c $< -o $@ 
 
 
 clean:
